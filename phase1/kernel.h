@@ -1,4 +1,4 @@
-#define DEBUG 0
+#define DEBUG 1
 
 typedef struct proc_struct proc_struct;
 
@@ -18,6 +18,12 @@ struct proc_struct {
    unsigned int   stacksize;
    int            status;         /* READY, BLOCKED, QUIT, etc. */
    /* other fields as needed... */
+   int            parent_pid;        /*IF -1 NO PARENT EXISTS*/
+   int            zapped;
+   int            kids;
+   int            kid_num;
+   int            kids_status_list[MAXPROC];
+   
 };
 
 struct psr_bits {
@@ -39,4 +45,6 @@ union psr_values {
 #define MAXPRIORITY 1
 #define SENTINELPID 1
 #define SENTINELPRIORITY LOWEST_PRIORITY
-
+#define QUIT 1
+#define READY 2
+#define BLOCKED 3

@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <usloss.h>
 #include <phase1.h>

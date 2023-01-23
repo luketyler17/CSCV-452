@@ -13,12 +13,25 @@
 /* ------------------------- Prototypes ----------------------------------- */
 int sentinel (void *);
 extern int start1 (char *);
-void dispatcher(void);
+void dispatcher();
 void launch();
 static void enableInterrupts();
 static void check_deadlock();
+void sort_readylist(proc_ptr process_input);
+proc_ptr remove_head();
 
-
+/*TODO*/
+int getpid(void);
+void dump_processes(void);
+int block_me(int new_status);
+int unblock_proc(int pid);
+int read_cur_start_time(void);
+void time_slice(void);
+int readtime(void);
+int join(int *status);
+void quit(int status);
+int zap(int pid);
+int is_zapped(void);
 /* -------------------------- Globals ------------------------------------- */
 
 /* Patrick's debugging global variable... */
@@ -28,6 +41,7 @@ int debugflag = 1;
 proc_struct ProcTable[MAXPROC];
 
 /* Process lists  */
+static proc_ptr ReadyList;
 
 /* current process ID */
 proc_ptr Current;
@@ -44,12 +58,20 @@ unsigned int next_pid = SENTINELPID;
    Parameters - none, called by USLOSS
    Returns - nothing
    Side Effects - lots, starts the whole thing
-   ----------------------------------------------------------------------- */
+ 
+  ----------------------------------------------------------------------- */
+int num_procs = 0;
+// void timeSlice() {
+//    if (readtime() >= time_slice) {
+//       dispatcher();
+//    }
+//    return;
+// }
+
 void startup()
 {
    int i;      /* loop index */
    int result; /* value returned by call to fork1() */
-
    /* initialize the process table */
 
    /* Initialize the Ready list, etc. */
@@ -58,7 +80,9 @@ void startup()
    ReadyList = NULL;
 
    /* Initialize the clock interrupt handler */
+   //USLOSS_IntVec[USLOSS_CLOCK_INT] = timeSlice();
 
+   //int_vec(CLOCK_INT) = 
    /* startup a sentinel process */
    if (DEBUG && debugflag)
        console("startup(): calling fork1() for sentinel\n");
@@ -112,17 +136,47 @@ void finish()
    ------------------------------------------------------------------------ */
 int fork1(char *name, int (*f)(char *), char *arg, int stacksize, int priority)
 {
-   int proc_slot;
+   int proc_slot = 0;
 
    if (DEBUG && debugflag)
       console("fork1(): creating process %s\n", name);
-
+   disableInterrupts();
    /* test if in kernel mode; halt if in user mode */
-
+   if (!kernel_or_user())
+   {
+      console("Process %d -- called in user mode. Halting process.\n", Current->pid);
+      halt(1);
+   }
    /* Return if stack size is too small */
-
+   if (stacksize < USLOSS_MIN_STACK)
+   {
+      console("Process %s could not be allocated\n", name);
+      return(-2);
+   }
+   /*Return if function pointer is NULL*/
+   if (f == NULL) 
+   {
+      console("Function pointer invalid, exiting...\n");
+      return(-1);
+   }
+   /*Return if name is NULL*/
+   if (name == NULL) 
+   {
+      console("Program name invalid, exiting....\n");
+      return(-1);
+   }
+   /*Return if Priority is out of range*/
+   if (priority < MAXPRIORITY && priority > MINPRIORITY) 
+   {
+      console("Priority of program out of range, exiting...\n");
+      return(-1);
+   }
    /* find an empty slot in the process table */
-
+   
+   while (ProcTable[proc_slot].state.start != NULL) 
+   {
+      proc_slot++;
+   }
    /* fill-in entry in process table */
    if ( strlen(name) >= (MAXNAME - 1) ) {
       console("fork1(): Process name is too long.  Halting...\n");
@@ -139,17 +193,72 @@ int fork1(char *name, int (*f)(char *), char *arg, int stacksize, int priority)
    else
       strcpy(ProcTable[proc_slot].start_arg, arg);
 
+   ;
+   ProcTable[proc_slot].stack = (char *) malloc(stacksize);
+   ProcTable[proc_slot].stacksize = stacksize;
+   ProcTable[proc_slot].pid = next_pid++;
+   ProcTable[proc_slot].priority = priority;
+   num_procs++;
    /* Initialize context for this process, but use launch function pointer for
     * the initial value of the process's program counter (PC)
     */
-   context_init(&(ProcTable[proc_slot].state), psr_get(),
-                ProcTable[proc_slot].stack, 
-                ProcTable[proc_slot].stacksize, launch);
+   context_init(&(ProcTable[proc_slot].state), 
+      psr_get(), 
+      ProcTable[proc_slot].stack, 
+      ProcTable[proc_slot].stacksize, 
+      launch);
+
+   if (strcmp(name, "sentinel") == 0 || strcmp(name, "start1") == 0)
+   {
+      ProcTable[proc_slot].parent_pid = -1;
+      ProcTable[proc_slot].kid_num = -1;
+      Current = &(ProcTable[proc_slot]);
+   }
+   else
+   {
+      ProcTable[proc_slot].parent_pid = Current->pid;
+      Current->kids++;
+      if (Current->child_proc_ptr == NULL)
+      {
+         Current->child_proc_ptr = &(ProcTable[proc_slot]);
+         ProcTable[proc_slot].kid_num = 0;
+      }
+      else
+      {
+         proc_ptr child;
+         child = &(Current->child_proc_ptr);
+         while(child->next_sibling_ptr != NULL)
+         {
+            child = child->next_sibling_ptr;
+         }
+         child->next_sibling_ptr = &ProcTable[proc_slot];
+         ProcTable[proc_slot].kid_num = Current->kids;
+      }
+   }
 
    /* for future phase(s) */
    p1_fork(ProcTable[proc_slot].pid);
 
+   sort_readylist(&ProcTable[proc_slot]);
+   if (strcmp("sentinel", ProcTable[proc_slot].name) == 0)
+   {
+
+   }
+   else
+   {
+      dispatcher();
+   }
+
+   return ProcTable[proc_slot].pid;
 } /* fork1 */
+
+
+
+int kernel_or_user(void)
+{
+   return PSR_CURRENT_MODE & psr_get();
+}
+
 
 /* ------------------------------------------------------------------------
    Name - launch
@@ -159,6 +268,7 @@ int fork1(char *name, int (*f)(char *), char *arg, int stacksize, int priority)
    Returns - nothing
    Side Effects - enable interrupts
    ------------------------------------------------------------------------ */
+
 void launch()
 {
    int result;
@@ -194,6 +304,14 @@ void launch()
    ------------------------------------------------------------------------ */
 int join(int *code)
 {
+   int living_kids = Current->kids;
+   proc_ptr currentChild = Current->child_proc_ptr;
+   while(currentChild->status != QUIT)
+   {
+      quit(0);
+   }
+
+   return currentChild->pid;
 } /* join */
 
 
@@ -208,7 +326,26 @@ int join(int *code)
    ------------------------------------------------------------------------ */
 void quit(int code)
 {
+   proc_ptr parent;
+   if (DEBUG && debugflag)
+      {
+         console("quit() has been called on process %d with exit code of %d", Current->pid, code);
+      }
+   
+   disableInterrupts();
+   Current->status = QUIT;
+   int i = 0;
+   if (Current->parent_pid != -1) {
+   while(ProcTable[i].pid != Current->parent_pid)
+   {
+      i++;
+   }
+   }
+   ProcTable[i].kids_status_list[Current->kid_num] = QUIT;
+
    p1_quit(Current->pid);
+
+   dispatcher();
 } /* quit */
 
 
@@ -222,10 +359,27 @@ void quit(int code)
    Returns - nothing
    Side Effects - the context of the machine is changed
    ----------------------------------------------------------------------- */
-void dispatcher(void)
+void dispatcher()
 {
-   proc_ptr next_process;
 
+   proc_ptr next_process = remove_head();
+
+   if (strcmp(next_process->name, "start1") == 0)
+   {
+
+      Current = next_process;
+      enableInterrupts();
+      context_switch(NULL, &(next_process->state));
+   }
+   else
+   {
+      sort_readylist(Current);
+
+      proc_ptr old = Current;
+      Current = next_process;
+      enableInterrupts();
+      context_switch(&(old->state), &(Current->state));
+   }
    p1_switch(Current->pid, next_process->pid);
 } /* dispatcher */
 
@@ -241,7 +395,7 @@ void dispatcher(void)
    Side Effects -  if system is in deadlock, print appropriate error
 		   and halt.
    ----------------------------------------------------------------------- */
-int sentinel (char * dummy)
+int sentinel (void * dummy)
 {
    if (DEBUG && debugflag)
       console("sentinel(): called\n");
@@ -273,3 +427,53 @@ void disableInterrupts()
     /* We ARE in kernel mode */
     psr_set( psr_get() & ~PSR_CURRENT_INT );
 } /* disableInterrupts */
+
+void enableInterrupts()
+{
+   if (kernel_or_user() == 0)
+   {
+      //IN USER MODE
+      console("Kernel Error: Not in kernel mode, may not enable interrupts\n");
+      halt(1);
+   } else {
+      //KERNEL MODE
+      psr_set(psr_get() | PSR_CURRENT_INT);
+   }
+}
+
+void sort_readylist(proc_ptr proccess_input)
+{
+   if (DEBUG && debugflag) {
+      console("Sorting process -- Priority: %d, PID: %d.\n", proccess_input->priority, proccess_input->pid);
+   }
+
+   if (ReadyList == NULL)  {
+      ReadyList = proccess_input;
+   }
+   else if (proccess_input->priority < ReadyList->priority)
+   {
+      proccess_input->next_proc_ptr = ReadyList;
+      ReadyList = proccess_input;
+   }
+   else
+   {
+      proc_ptr next;
+      next = ReadyList;
+      while(proccess_input->priority > next->priority){
+         next = next->next_proc_ptr;
+      }
+      next->next_proc_ptr = proccess_input;
+
+   }
+   
+}
+
+proc_ptr remove_head()
+{
+   proc_ptr tmp = ReadyList;
+
+   ReadyList = ReadyList->next_proc_ptr;
+   tmp->next_proc_ptr = NULL;
+
+   return tmp;
+}
