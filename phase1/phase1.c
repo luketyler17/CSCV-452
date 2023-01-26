@@ -120,6 +120,7 @@ void finish()
 {
    if (DEBUG && debugflag)
       console("in finish...\n");
+   exit(0);
 } /* finish */
 
 /* ------------------------------------------------------------------------
@@ -226,7 +227,7 @@ int fork1(char *name, int (*f)(char *), char *arg, int stacksize, int priority)
       else
       {
          proc_ptr child;
-         child = &(Current->child_proc_ptr);
+         child = Current->child_proc_ptr;
          while(child->next_sibling_ptr != NULL)
          {
             child = child->next_sibling_ptr;
@@ -305,13 +306,13 @@ void launch()
 int join(int *code)
 {
    int living_kids = Current->kids;
-   proc_ptr currentChild = Current->child_proc_ptr;
-   while(currentChild->status != QUIT)
+   proc_ptr oldChild = Current->child_proc_ptr;
+   while(oldChild->status != QUIT)
    {
       quit(0);
    }
-
-   return currentChild->pid;
+   Current->child_proc_ptr = oldChild->next_sibling_ptr;
+   return oldChild->pid;
 } /* join */
 
 
@@ -333,6 +334,8 @@ void quit(int code)
       }
    
    disableInterrupts();
+   if (strcmp(Current->name, "start1") == 0) 
+   {
    Current->status = QUIT;
    int i = 0;
    if (Current->parent_pid != -1) {
@@ -344,8 +347,11 @@ void quit(int code)
    ProcTable[i].kids_status_list[Current->kid_num] = QUIT;
 
    p1_quit(Current->pid);
-
    dispatcher();
+   }
+   else{
+      finish();
+   }
 } /* quit */
 
 
