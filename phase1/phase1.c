@@ -93,8 +93,10 @@ void startup()
       console("startup(): initializing the Ready & Blocked lists\n");
 
    /* Initialize the clock interrupt handler */
+   //int (*f)(char *)
+   //set int_vec of 0 (aka clock_int) to the function pointer of time_slice()
+   //int_vec[CLOCK_INT] = *time_slice();
 
-   // int_vec(CLOCK_INT) =
    /* startup a sentinel process */
    if (DEBUG && debugflag)
       console("startup(): calling fork1() for sentinel\n");
@@ -333,15 +335,18 @@ int join(int *code)
       Blocked = Current;
       Blocked->status = BLOCKED;
       add_next_process_blocked(Blocked);
-      Old = Current;
-      int living_kids = Current->kids;
       proc_ptr oldChild = Current->child_proc_ptr;
+      //need to make sure logic works in case of sibling being joined on instead of direct child
       while (oldChild->status != QUIT)
       {
          Blocked->blocked_by = oldChild->pid;
          dispatcher();
+         if (Blocked->zapped == 1)
+         {
+            return -1;
+         }
       }
-      // we have to call dispatcher in here somewhere -> access the child process & block the parent
+      remove_from_block_list(&Blocked);
       Blocked->status = READY;
       Current->child_proc_ptr = oldChild->next_sibling_ptr;
       *code = oldChild->quit_code;
@@ -386,6 +391,7 @@ void quit(int code)
          next_ptr = BlockedList[j];
          while (next_ptr != NULL)
          {
+            //next_ptr == a process on the blocked list, check if current process is blocking that process on the BlockedList
             if (next_ptr->blocked_by == Current->pid)
             {
                found = 1;
@@ -706,6 +712,7 @@ void dump_processes(void)
    printf("PID\tParent\tPriority\tStatus\tNum Kids\tTime Used\tName\n");
    while (ProcTable[i].status != NULL)
    {
+      //needs to be redone - relooked at
       if (ProcTable[i].status > 10)
       {
          status = "BLOCK ME";
@@ -761,7 +768,7 @@ void time_slice(void)
 
 int readtime(void)
 {
-   sys_clock();
+   return sys_clock();
 }
 
 void add_next_process_blocked(proc_ptr input)
