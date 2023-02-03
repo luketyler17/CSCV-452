@@ -8,22 +8,29 @@ struct proc_struct {
    proc_ptr       next_proc_ptr;
    proc_ptr       child_proc_ptr;
    proc_ptr       next_sibling_ptr;
-   char           name[MAXNAME];     /* process's name */
-   char           start_arg[MAXARG]; /* args passed to process */
-   context        state;             /* current context for process */
-   short          pid;               /* process id */
+   char           name[MAXNAME];          /* process's name */
+   char           start_arg[MAXARG];      /* args passed to process */
+   context        currentContext;         /* current context for process */
+   short          pid;                    /* process id */
    int            priority;
-   int (* start_func) (char *);   /* function where process begins -- launch */
+   int (* start_func) (char *);           /* function where process begins -- launch */
    char          *stack;
    unsigned int   stacksize;
-   int            status;         /* READY, BLOCKED, QUIT, etc. */
+   int            status;                 /* READY, BLOCKED, QUIT, etc. */
+ 
    /* other fields as needed... */
-   int            parent_pid;        /*IF -1 NO PARENT EXISTS*/
-   int            zapped;
+   int            total_time;             // amount of time used by the CPU
+   int            startTime;              // time started by CPU - will change on each call
+   int            lastRunTime;            // time ended by CPU
+   int            parent_pid;             /*IF -1 NO PARENT EXISTS*/
+   int            zapped;                 // 1 == TRUE 0 == FALSE
    int            kids;
    int            kid_num;
    int            kids_status_list[MAXPROC];
-   
+   int            quit_code;              //if quit, what code is it
+   int            proc_table_location;    //location on process table
+   int            parent_location;        //parent location on process table
+   int            blocked_by;             //pid of process blocking current proccess
 };
 
 struct psr_bits {
@@ -48,3 +55,4 @@ union psr_values {
 #define QUIT 1
 #define READY 2
 #define BLOCKED 3
+#define RUNNING 4
