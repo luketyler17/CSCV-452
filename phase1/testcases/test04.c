@@ -33,7 +33,7 @@ int start1(char *arg)
 int XXp1(char *arg)
 {
    printf("XXp1(): started, pid = %d\n", getpid());
-   quit(getpid());
+   quit(-getpid());
    return 0;
 }
 

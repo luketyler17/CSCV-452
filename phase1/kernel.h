@@ -52,7 +52,10 @@ union psr_values {
 #define MAXPRIORITY 1
 #define SENTINELPID 1
 #define SENTINELPRIORITY LOWEST_PRIORITY
+#define EMPTY 0
 #define QUIT 1
 #define READY 2
-#define BLOCKED 3
+#define JOIN_BLOCK 3
 #define RUNNING 4
+#define ZAP_BLOCK 5
+#define BLOCKED 6

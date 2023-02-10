@@ -24,6 +24,8 @@ void add_next_process(proc_ptr process_input);
 void clock_handler(int dev, void *arg);
 void add_next_process_blocked(proc_ptr input);
 void remove_from_block_list(proc_ptr input);
+void disableInterrupts();
+int kernel_or_user(void);
 
 /*TODO*/
 int getpid(void);
@@ -58,12 +60,14 @@ unsigned int next_pid = SENTINELPID;
 
 void clock_handler(int dev, void *arg)
 {
-   int curTime = sys_clock();
-   if ((curTime - Current->startTime) > 80000)
-   {
-      // call to dispatcher();
-   }
+   // int curTime = sys_clock();
+   // if ((curTime - Current->startTime) > 80000)
+   // {
+   //    dispatcher();
+   // }
+   time_slice();
 }
+
 /* -------------------------- Functions ----------------------------------- */
 /* ------------------------------------------------------------------------
    Name - startup
@@ -75,18 +79,17 @@ void clock_handler(int dev, void *arg)
 
   ----------------------------------------------------------------------- */
 int num_procs = 0;
-// void timeSlice() {
-//    if (readtime() >= time_slice) {
-//       dispatcher();
-//    }
-//    return;
-// }
+
 
 void startup()
 {
-   int i;      /* loop index */
    int result; /* value returned by call to fork1() */
    /* initialize the process table */
+
+   for (int i = 0; i < 50; i++)
+   {
+      ProcTable[i].status = 0;
+   }
 
    /* Initialize the Ready list, etc. */
    if (DEBUG && debugflag)
@@ -95,7 +98,7 @@ void startup()
    /* Initialize the clock interrupt handler */
    //int (*f)(char *)
    //set int_vec of 0 (aka clock_int) to the function pointer of time_slice()
-   //int_vec[CLOCK_INT] = *time_slice();
+   int_vec[CLOCK_INT] = clock_handler;
 
    /* startup a sentinel process */
    if (DEBUG && debugflag)
@@ -161,7 +164,7 @@ int fork1(char *name, int (*f)(char *), char *arg, int stacksize, int priority)
       console("fork1(): creating process %s\n", name);
    disableInterrupts();
    /* test if in kernel mode; halt if in user mode */
-   if (!kernel_or_user())
+   if (!(kernel_or_user()))
    {
       console("Process %d -- called in user mode. Halting process.\n", Current->pid);
       halt(1);
@@ -190,9 +193,14 @@ int fork1(char *name, int (*f)(char *), char *arg, int stacksize, int priority)
       console("Priority of program out of range, exiting...\n");
       return (-1);
    }
+   /* Return if maximum processes reached */
+   if (next_pid > MAXPROC)
+   {
+      return (-1);
+   }
    /* find an empty slot in the process table */
 
-   while (ProcTable[proc_slot].currentContext.start != NULL)
+   while (ProcTable[proc_slot].status != QUIT && ProcTable[proc_slot].status != 0)
    {
       proc_slot++;
    }
@@ -214,7 +222,6 @@ int fork1(char *name, int (*f)(char *), char *arg, int stacksize, int priority)
    else
       strcpy(ProcTable[proc_slot].start_arg, arg);
 
-   ;
    ProcTable[proc_slot].stack = (char *)malloc(stacksize);
    ProcTable[proc_slot].stacksize = stacksize;
    ProcTable[proc_slot].pid = next_pid++;
@@ -264,11 +271,12 @@ int fork1(char *name, int (*f)(char *), char *arg, int stacksize, int priority)
    p1_fork(ProcTable[proc_slot].pid);
    add_next_process(&ProcTable[proc_slot]);
    // sort_readylist(&ProcTable[proc_slot]);
+   enableInterrupts();
    if (strcmp("start1", ProcTable[proc_slot].name) == 0)
    {
       dispatcher();
    }
-
+   
    return ProcTable[proc_slot].pid;
 } /* fork1 */
 
@@ -321,7 +329,7 @@ void launch()
 int join(int *code)
 {
 
-   if (!kernel_or_user())
+   if (!(kernel_or_user()))
    {
       console("Join() called in user mode. Halting...\n");
       halt(1);
@@ -333,10 +341,9 @@ int join(int *code)
    else
    {
       Blocked = Current;
-      Blocked->status = BLOCKED;
+      Blocked->status = JOIN_BLOCK;
       add_next_process_blocked(Blocked);
       proc_ptr oldChild = Current->child_proc_ptr;
-      //need to make sure logic works in case of sibling being joined on instead of direct child
       while (oldChild->status != QUIT)
       {
          Blocked->blocked_by = oldChild->pid;
@@ -346,7 +353,7 @@ int join(int *code)
             return -1;
          }
       }
-      remove_from_block_list(&Blocked);
+      //remove_from_block_list(&Blocked);
       Blocked->status = READY;
       Current->child_proc_ptr = oldChild->next_sibling_ptr;
       *code = oldChild->quit_code;
@@ -363,19 +370,23 @@ int join(int *code)
    Returns - nothing
    Side Effects - changes the parent of pid child completion status list.
    ------------------------------------------------------------------------ */
+//need to remove from process_table
 void quit(int code)
 {
-   if (!kernel_or_user())
+   if (!(kernel_or_user()))
    {
       console("Quit() called in user mode. Halting...\n");
       halt(1);
    }
-   proc_ptr parent;
    if (DEBUG && debugflag)
    {
       console("quit() has been called on process %d with exit code of %d\n", Current->pid, code);
    }
-
+   if (Current->child_proc_ptr != NULL && Current->child_proc_ptr->status != QUIT)
+   {
+      console("quit() has been called while process has living children, halting...");
+      halt(1);
+   }
    disableInterrupts();
    Current->status = QUIT;
    int i = 0, found = 0;
@@ -413,12 +424,15 @@ void quit(int code)
       // ProcTable[i].status = READY;
       p1_quit(Current->pid);
       // add_next_process(&ProcTable[i]);
+      enableInterrupts();
       dispatcher();
    }
    else
    {
+      enableInterrupts();
       dispatcher();
    }
+   enableInterrupts();
    dispatcher();
 } /* quit */
 
@@ -461,48 +475,19 @@ void dispatcher(void)
       {
          pPreviousContext = &Current->currentContext;
       }
+      if (pPreviousContext != NULL)
+      {
+         Current->lastRunTime = sys_clock();
+         Current->total_time = Current->total_time + (Current->lastRunTime - Current->startTime);
+      }
       Current = next_process;
+      Current->startTime = sys_clock();
+      enableInterrupts();
       context_switch(pPreviousContext, &(next_process->currentContext));
       p1_switch(Current->pid, next_process->pid);
    }
 }
-// if (Current->status == BLOCKED)
-// {
-//    next_process->next_proc_ptr = &(Current);
-//    //if
-//    //XXP1 -> Start1() -> Sentinel
-//    //next_process -> take the current process and put it behind
-//    // XXp2.status == RUNNING -> XXp1.status == BLOCKED -> start1.status == BLOCKED
-//    // XXp2.status == QUIT -> XXp!.status == BLOCKED -> start1.status == BLOCKED
-//    // XXp1.status == RUNNING -> start1.status == BLOCKED
-//    // XXp1 == QUIT -> start1 == BLOCKED
-//    // start1 == RUNNING
-//    /*
-//       while next_process.status != QUIT
-//       {
-//          next_process = next_process.next_process_ptr;
-//       }
-//       Current = next_process;
-//       context_switch(Current)
-//    */
-// }
-// if (strcmp(next_process->name, "start1") == 0)
-// {
-//       Current = next_process;
-//       Current->status == RUNNING;
-//       enableInterrupts();
-//       context_switch(NULL, &(next_process->state));
-// }
-// else
-// {
-//    sort_readylist(Current);
 
-//    proc_ptr old = Current;
-//    Current = next_process;
-//    Current->next_proc_ptr = old;
-//    enableInterrupts();
-//    context_switch(&(old->state), &(Current->state));
-// }
 /* dispatcher */
 
 /* ------------------------------------------------------------------------
@@ -575,48 +560,6 @@ void enableInterrupts()
    }
 }
 
-// void sort_readylist(proc_ptr proccess_input)
-// {
-//    if (proccess_input->status != READY)
-//    {
-//       return;
-//    }
-//    if (DEBUG && debugflag)
-//    {
-//       console("Sorting process -- Priority: %d, PID: %d.\n", proccess_input->priority, proccess_input->pid);
-//    }
-
-//    if (ReadyList == NULL)
-//    {
-//       ReadyList = proccess_input;
-//    }
-//    else if (proccess_input->priority < ReadyList->priority)
-//    {
-//       proccess_input->next_proc_ptr = ReadyList;
-//       ReadyList = proccess_input;
-//    }
-//    else
-//    {
-//       proc_ptr next;
-//       next = ReadyList;
-//       while (proccess_input->priority > next->next_proc_ptr->priority)
-//       {
-//          next = next->next_proc_ptr;
-//       }
-//       proccess_input->next_proc_ptr = next->next_proc_ptr;
-//       next->next_proc_ptr = proccess_input;
-//    }
-// }
-
-// proc_ptr remove_head()
-// {
-//    proc_ptr tmp = ReadyList;
-
-//    ReadyList = ReadyList->next_proc_ptr;
-//    tmp->next_proc_ptr = NULL;
-
-//    return tmp;
-// }
 
 proc_ptr fetch_next_process()
 {
@@ -653,7 +596,7 @@ void add_next_process(proc_ptr input)
 
 int zap(int pid)
 {
-   if (!kernel_or_user)
+   if (!(kernel_or_user()))
    {
       console("Zap called in user mode:: Halting - Process ID: %d\n", pid);
    }
@@ -679,7 +622,7 @@ int zap(int pid)
    zapped_proc->zapped = 1;
    while (zapped_proc->status != QUIT)
    {
-      blocked_ptr->status = BLOCKED;
+      blocked_ptr->status = ZAP_BLOCK;
       if (blocked_ptr->zapped == 1)
       {
 
@@ -706,14 +649,13 @@ int getpid(void)
 
 void dump_processes(void)
 {
-   int i = 0;
    char *status;
    printf("---------------\n");
    printf("PID\tParent\tPriority\tStatus\tNum Kids\tTime Used\tName\n");
-   while (ProcTable[i].status != NULL)
+   for(int i = 0; i < 50; i++)
    {
       //needs to be redone - relooked at
-      if (ProcTable[i].status > 10)
+      if (ProcTable[i].status >= 10)
       {
          status = "BLOCK ME";
       }
@@ -722,11 +664,20 @@ void dump_processes(void)
 
          switch (ProcTable[i].status)
          {
+         case 0:
+            status = "EMPTY";
+            break;
          case READY:
             status = "READY";
             break;
          case RUNNING:
             status = "RUNNING";
+            break;
+         case JOIN_BLOCK:
+            status = "JOIN BLOCKED";
+            break;
+         case ZAP_BLOCK:
+            status = "ZAP BLOCKED";
             break;
          case BLOCKED:
             status = "BLOCKED";
@@ -736,8 +687,7 @@ void dump_processes(void)
             break;
          }
       }
-      printf("%d\t%d\t%d\t%s\t%d\t%d\t%s\n", ProcTable[i].pid, ProcTable[i].parent_pid, ProcTable[i].priority, status, ProcTable[i].kid_num, ProcTable[i].total_time, ProcTable[i].name);
-      i++;
+      printf("%d\t%d\t\t%d\t\t\t%s\t%d\t\t\t%d\t\t\t%s\n", ProcTable[i].pid, ProcTable[i].parent_pid, ProcTable[i].priority, status, ProcTable[i].kids, ProcTable[i].total_time, ProcTable[i].name);
    }
 }
 
@@ -822,4 +772,47 @@ void remove_from_block_list(proc_ptr input)
       }
       i++;
    }
+}
+
+int block_me(int new_status)
+{
+   proc_ptr blocked = Current;
+   blocked->status = new_status;
+   add_next_process_blocked(blocked);
+   return 0;
+}
+
+int unblock_proc(int pid)
+{
+   //iterate over process table to fid PID
+   for(int i=0; i < 50; i++)
+   {
+      //once PID found and IS NOT NULL continue
+      if (&ProcTable[i] != NULL && ProcTable[i].pid == pid)
+      {
+         //if status is not greater than 10, return -2
+         if (ProcTable[i].status <= 10)
+         {
+            return -2;
+         }
+         remove_from_block_list(&ProcTable[i]);
+         while(ProcTable[i].status != ZAP_BLOCK || ProcTable[i].status != QUIT)
+         {
+            //unit process is quit, check to ensure process does not get zapped
+            dispatcher();
+         }
+         if (ProcTable[i].status != ZAP_BLOCK)
+         {
+            //calling process was zapped
+            return -1;
+         }
+        else
+         {
+            //process quit normally
+            return 0;
+         }
+      };
+   }
+   //process was not found in table, return -2
+   return -2;
 }
