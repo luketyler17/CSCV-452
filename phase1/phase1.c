@@ -187,13 +187,13 @@ int fork1(char *name, int (*f)(char *), char *arg, int stacksize, int priority)
       return (-1);
    }
    /*Return if Priority is out of range*/
-   if (name != "sentinel" && (priority < 1 || priority > 5))
+   if (strcmp(name, "sentinel") && (priority < 1 || priority > 5))
    {
       console("Priority of program out of range, exiting...\n");
       return (-1);
    }
    /* Return if maximum processes reached */
-   if (next_pid > MAXPROC)
+   if (num_procs > MAXPROC)
    {
       return (-1);
    }
@@ -346,20 +346,28 @@ int join(int *code)
    }
    else
    {
+      // current process is now going to be blocked by the join
       Blocked = Current;
       Blocked->status = JOIN_BLOCK;
+      // add process into blocked_list
       add_next_process_blocked(Blocked);
+      //until the child quits, continue running dispatcher until the child runs and quits
       while (oldChild->status != QUIT)
       {
+         //let the blocked program know that it is being blocked by a child process, then dispatch
          Blocked->blocked_by = oldChild->pid;
          dispatcher();
          if (Blocked->zapped == 1)
          {
+            // if zapped during join, return -2
+            Current->child_proc_ptr = oldChild->next_sibling_ptr;
+            oldChild->next_sibling_ptr = NULL;
             return -1;
          }
       }
       // remove_from_block_list(&Blocked);
       Blocked->status = READY;
+      //remove the child from the list of children, make the sibling the new child
       Current->child_proc_ptr = oldChild->next_sibling_ptr;
       oldChild->next_sibling_ptr = NULL;
       *code = oldChild->quit_code;
@@ -411,19 +419,14 @@ void quit(int code)
             // next_ptr == a process on the blocked list, check if current process is blocking that process on the BlockedList
             if (next_ptr->blocked_by == Current->pid)
             {
-               found = 1;
-               break;
+               remove_from_block_list(next_ptr);
+               next_ptr = BlockedList[j];
             }
-            next_ptr = next_ptr->next_proc_ptr;
+            else
+            {
+               next_ptr = next_ptr->next_proc_ptr;
+            }
          }
-         if (found)
-         {
-            break;
-         }
-      }
-      if (found)
-      {
-         remove_from_block_list(next_ptr);
       }
       Current->quit_code = code;
       ProcTable[i].kids_status_list[Current->kid_num] = code;
@@ -431,10 +434,12 @@ void quit(int code)
       p1_quit(Current->pid);
       // add_next_process(&ProcTable[i]);
       enableInterrupts();
+      num_procs--;
       dispatcher();
    }
    else
    {
+      num_procs--;
       enableInterrupts();
       dispatcher();
    }
@@ -779,6 +784,7 @@ void remove_from_block_list(proc_ptr input)
          {
             BlockedList[i] = next_ptr->next_proc_ptr;
             next_ptr->next_proc_ptr = NULL;
+            next_ptr->blocked_by = 0;
             add_next_process(next_ptr);
             return;
          }
