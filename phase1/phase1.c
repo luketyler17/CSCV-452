@@ -80,7 +80,6 @@ void clock_handler(int dev, void *arg)
   ----------------------------------------------------------------------- */
 int num_procs = 0;
 
-
 void startup()
 {
    int result; /* value returned by call to fork1() */
@@ -96,8 +95,8 @@ void startup()
       console("startup(): initializing the Ready & Blocked lists\n");
 
    /* Initialize the clock interrupt handler */
-   //int (*f)(char *)
-   //set int_vec of 0 (aka clock_int) to the function pointer of time_slice()
+   // int (*f)(char *)
+   // set int_vec of 0 (aka clock_int) to the function pointer of time_slice()
    int_vec[CLOCK_INT] = clock_handler;
 
    /* startup a sentinel process */
@@ -172,7 +171,7 @@ int fork1(char *name, int (*f)(char *), char *arg, int stacksize, int priority)
    /* Return if stack size is too small */
    if (stacksize < USLOSS_MIN_STACK)
    {
-      console("Process %s could not be allocated\n", name);
+      console("Process %s could not be allocated -- stack size too small.\n", name);
       return (-2);
    }
    /*Return if function pointer is NULL*/
@@ -188,7 +187,7 @@ int fork1(char *name, int (*f)(char *), char *arg, int stacksize, int priority)
       return (-1);
    }
    /*Return if Priority is out of range*/
-   if (priority < MAXPRIORITY && priority > MINPRIORITY)
+   if (name != "sentinel" && (priority < 1 || priority > 5))
    {
       console("Priority of program out of range, exiting...\n");
       return (-1);
@@ -276,7 +275,7 @@ int fork1(char *name, int (*f)(char *), char *arg, int stacksize, int priority)
    {
       dispatcher();
    }
-   
+
    return ProcTable[proc_slot].pid;
 } /* fork1 */
 
@@ -328,22 +327,28 @@ void launch()
    ------------------------------------------------------------------------ */
 int join(int *code)
 {
-
+   proc_ptr oldChild = Current->child_proc_ptr;
    if (!(kernel_or_user()))
    {
       console("Join() called in user mode. Halting...\n");
       halt(1);
    }
-   if (Current->child_proc_ptr == NULL)
+   if (oldChild == NULL)
    {
       return -2;
+   }
+   if (oldChild->status == QUIT)
+   {
+
+      *code = oldChild->quit_code;
+      Current->child_proc_ptr = oldChild->next_sibling_ptr;
+      return oldChild->pid;
    }
    else
    {
       Blocked = Current;
       Blocked->status = JOIN_BLOCK;
       add_next_process_blocked(Blocked);
-      proc_ptr oldChild = Current->child_proc_ptr;
       while (oldChild->status != QUIT)
       {
          Blocked->blocked_by = oldChild->pid;
@@ -353,9 +358,10 @@ int join(int *code)
             return -1;
          }
       }
-      //remove_from_block_list(&Blocked);
+      // remove_from_block_list(&Blocked);
       Blocked->status = READY;
       Current->child_proc_ptr = oldChild->next_sibling_ptr;
+      oldChild->next_sibling_ptr = NULL;
       *code = oldChild->quit_code;
       return oldChild->pid;
    }
@@ -370,7 +376,7 @@ int join(int *code)
    Returns - nothing
    Side Effects - changes the parent of pid child completion status list.
    ------------------------------------------------------------------------ */
-//need to remove from process_table
+// need to remove from process_table
 void quit(int code)
 {
    if (!(kernel_or_user()))
@@ -402,7 +408,7 @@ void quit(int code)
          next_ptr = BlockedList[j];
          while (next_ptr != NULL)
          {
-            //next_ptr == a process on the blocked list, check if current process is blocking that process on the BlockedList
+            // next_ptr == a process on the blocked list, check if current process is blocking that process on the BlockedList
             if (next_ptr->blocked_by == Current->pid)
             {
                found = 1;
@@ -432,8 +438,6 @@ void quit(int code)
       enableInterrupts();
       dispatcher();
    }
-   enableInterrupts();
-   dispatcher();
 } /* quit */
 
 /* ------------------------------------------------------------------------
@@ -518,14 +522,24 @@ static void check_deadlock()
    proc_ptr next_proc = fetch_next_process();
    if (next_proc == NULL)
    {
-      console("All processes completed\n");
-      halt(1);
+      for (int i = 0; i < 6; i++)
+      {
+         next_proc = BlockedList[i];
+         if (next_proc != NULL)
+         {
+            printf("check_deadlock processes still exist.. halting\n");
+            halt(1);
+         }
+      }
+      printf("All processes completed.\n");
+      exit(0);
    }
    else
    {
-      add_next_process(next_proc);
-      dispatcher();
+      printf("check_deadlock processes still exist.. halting\n");
+      halt(1);
    }
+
 } /* check_deadlock */
 
 /*
@@ -559,7 +573,6 @@ void enableInterrupts()
       psr_set(psr_get() | PSR_CURRENT_INT);
    }
 }
-
 
 proc_ptr fetch_next_process()
 {
@@ -633,7 +646,7 @@ int zap(int pid)
          dispatcher();
       }
    }
-   //remove_from_block_list(blocked_ptr);
+   // remove_from_block_list(blocked_ptr);
    return 0;
 }
 
@@ -652,9 +665,9 @@ void dump_processes(void)
    char *status;
    printf("---------------\n");
    printf("PID\tParent\tPriority\tStatus\tNum Kids\tTime Used\tName\n");
-   for(int i = 0; i < 50; i++)
+   for (int i = 0; i < 50; i++)
    {
-      //needs to be redone - relooked at
+      // needs to be redone - relooked at
       if (ProcTable[i].status >= 10)
       {
          status = "BLOCK ME";
@@ -784,35 +797,35 @@ int block_me(int new_status)
 
 int unblock_proc(int pid)
 {
-   //iterate over process table to fid PID
-   for(int i=0; i < 50; i++)
+   // iterate over process table to fid PID
+   for (int i = 0; i < 50; i++)
    {
-      //once PID found and IS NOT NULL continue
+      // once PID found and IS NOT NULL continue
       if (&ProcTable[i] != NULL && ProcTable[i].pid == pid)
       {
-         //if status is not greater than 10, return -2
+         // if status is not greater than 10, return -2
          if (ProcTable[i].status <= 10)
          {
             return -2;
          }
          remove_from_block_list(&ProcTable[i]);
-         while(ProcTable[i].status != ZAP_BLOCK || ProcTable[i].status != QUIT)
+         while (ProcTable[i].status != ZAP_BLOCK || ProcTable[i].status != QUIT)
          {
-            //unit process is quit, check to ensure process does not get zapped
+            // unit process is quit, check to ensure process does not get zapped
             dispatcher();
          }
          if (ProcTable[i].status != ZAP_BLOCK)
          {
-            //calling process was zapped
+            // calling process was zapped
             return -1;
          }
-        else
+         else
          {
-            //process quit normally
+            // process quit normally
             return 0;
          }
       };
    }
-   //process was not found in table, return -2
+   // process was not found in table, return -2
    return -2;
 }

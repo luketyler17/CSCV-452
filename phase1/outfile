@@ -6,7 +6,7 @@ start1(): performing join
 XXp1(): started
 XXp1(): arg = `XXp1'
 start1(): exit status for child 3 is -3
-All processes completed
+All processes completed.
 
 starting test 01 ....
 
@@ -21,7 +21,7 @@ start1(): performing second join
 XXp2(): started
 XXp2(): arg = `XXp2'
 start1(): exit status for child 4 is 5
-All processes completed
+All processes completed.
 
 starting test 02 ....
 
@@ -41,7 +41,7 @@ XXp2(): arg = `XXp2'
 XXp1(): first join returned kid_pid = 4, status = 5
 XXp1(): second join returned kid_pid = 5, status = 5
 start1(): exit status for child 3 is -3
-All processes completed
+All processes completed.
 
 starting test 03 ....
 
@@ -118,7 +118,7 @@ XXp1(): performing join's
 XXp1(): first join returned kid_pid = 4, status = 5
 XXp1(): second join returned kid_pid = 5, status = 5
 start1(): exit status for child 3 is -3
-All processes completed
+All processes completed.
 
 starting test 04 ....
 
@@ -170,11 +170,11 @@ start1(): after fork of child 46
 start1(): after fork of child 47
 start1(): after fork of child 48
 start1(): after fork of child 49
-start1(): after fork of child -1
+start1(): after fork of child 50
 ---------------
 PID	Parent	Priority	Status	Num Kids	Time Used	Name
 1	-1		6			READY	0			0			sentinel
-2	-1		1			RUNNING	47			0			start1
+2	-1		1			RUNNING	48			0			start1
 3	2		3			READY	0			0			XXp1
 4	2		3			READY	0			0			XXp1
 5	2		3			READY	0			0			XXp1
@@ -222,7 +222,7 @@ PID	Parent	Priority	Status	Num Kids	Time Used	Name
 47	2		3			READY	0			0			XXp1
 48	2		3			READY	0			0			XXp1
 49	2		3			READY	0			0			XXp1
-0	0		0			EMPTY	0			0			
+50	2		3			READY	0			0			XXp1
 XXp1(): started, pid = 3
 start1(): after join of child 3, status = -3
 XXp1(): started, pid = 4
@@ -317,7 +317,8 @@ XXp1(): started, pid = 48
 start1(): after join of child 48, status = -48
 XXp1(): started, pid = 49
 start1(): after join of child 49, status = -49
-start1(): after join of child -2, status = -49
+XXp1(): started, pid = 50
+start1(): after join of child 50, status = -50
 start1(): after fork of child -1
 start1(): after fork of child -1
 start1(): after fork of child -1
@@ -369,7 +370,7 @@ start1(): after fork of child -1
 ---------------
 PID	Parent	Priority	Status	Num Kids	Time Used	Name
 1	-1		6			READY	0			0			sentinel
-2	-1		1			READY	47			315			start1
+2	-1		1			READY	48			320			start1
 3	2		3			QUIT	0			5			XXp1
 4	2		3			QUIT	0			7			XXp1
 5	2		3			QUIT	0			7			XXp1
@@ -417,56 +418,195 @@ PID	Parent	Priority	Status	Num Kids	Time Used	Name
 47	2		3			QUIT	0			6			XXp1
 48	2		3			QUIT	0			8			XXp1
 49	2		3			QUIT	0			6			XXp1
+50	2		3			QUIT	0			7			XXp1
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+start1(): after join of child -2, status = -50
+All processes completed.
+
+starting test 05 ....
+
+start1(): started
+start1(): buf = `XXp2'
+start1(): after fork of child 3
+start1(): buf = `XXp3'
+start1(): after fork of child 4
+start1(): buf = `XXp4'
+start1(): after fork of child 5
+XXp1(): XXp2, started, pid = 3
+XXp1(): XXp3, started, pid = 4
+XXp1(): XXp4, started, pid = 5
+---------------
+PID	Parent	Priority	Status	Num Kids	Time Used	Name
+1	-1		6			READY	0			0			sentinel
+2	-1		1			JOIN BLOCKED	3			6			start1
+3	2		3			READY	0			579957			XXp2
+4	2		3			RUNNING	0			399948			XXp3
+5	2		3			READY	0			399962			XXp4
 0	0		0			EMPTY	0			0			
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-start1(): after join of child -2, status = -49
-All processes completed
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+XXp1(): exitting, pid = 4
+XXp1(): exitting, pid = 5
+XXp1(): exitting, pid = 3
+start1(): after join of child 3, status = -3
+start1(): after join of child 4, status = -4
+start1(): after join of child 5, status = -5
+start1(): buf = `XXp2'
+start1(): after fork of child 6
+start1(): buf = `XXp3'
+start1(): after fork of child 7
+start1(): buf = `XXp4'
+start1(): after fork of child 8
+XXp1(): XXp2, started, pid = 6
+XXp1(): XXp3, started, pid = 7
+XXp1(): XXp4, started, pid = 8
+---------------
+PID	Parent	Priority	Status	Num Kids	Time Used	Name
+1	-1		6			READY	0			0			sentinel
+2	-1		1			JOIN BLOCKED	6			11			start1
+6	2		3			READY	0			5409436			XXp2
+7	2		3			RUNNING	0			4429507			XXp3
+8	2		3			READY	0			4669530			XXp4
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+XXp1(): exitting, pid = 8
+XXp1(): exitting, pid = 7
+XXp1(): exitting, pid = 6
+start1(): after join of child 6, status = -6
+start1(): after join of child 7, status = -7
+start1(): after join of child 8, status = -8
+All processes completed.
 
 starting test 06 ....
 
@@ -475,7 +615,7 @@ START1: calling zap
 XXp1: started
 XXp1: calling quit
 START1: zap_result = 0
-All processes completed
+All processes completed.
 
 starting test 07 ....
 
@@ -488,7 +628,7 @@ XXp2(): started
 XXp2(): arg = `XXp2'
 XXp1(): exit status for child 4 is 5
 start1(): exit status for child 3 is -3
-All processes completed
+All processes completed.
 
 starting test 08 ....
 
@@ -508,7 +648,7 @@ XXp2(): started
 XXp2(): arg = `XXp2'
 XXp1(): second join returned kid_pid = 5, status = 5
 start1(): exit status for child 3 is -3
-All processes completed
+All processes completed.
 
 starting test 09 ....
 
@@ -523,7 +663,7 @@ start1(): performing join
 XXp1(): started
 XXp1(): arg = `XXp1'
 XXp1(): about to zap parent -- should result in deadlock
-All processes completed
+check_deadlock processes still exist.. halting
 
 starting test 11 ....
 
@@ -610,7 +750,7 @@ PID	Parent	Priority	Status	Num Kids	Time Used	Name
 XXp1(): join returned kid_pid = 5, status = 5
 start1(): exit status for child 3 is -3
 start1(): performing join
-All processes completed
+check_deadlock processes still exist.. halting
 
 starting test 14 ....
 
@@ -754,7 +894,7 @@ XXp1(): joining with first child
 XXp1(): join returned kid_pid = 5, status = 5
 start1(): exit status for child 3 is -3
 start1(): performing join
-All processes completed
+check_deadlock processes still exist.. halting
 
 starting test 16 ....
 
@@ -825,17 +965,17 @@ PID	Parent	Priority	Status	Num Kids	Time Used	Name
 XXp1(): after zap'ing process with pid_z, status = 0
 XXp1(): joining with first child
 XXp1(): join returned kid_pid = 5, status = 5
-start1(): exit status for child -1 is 3
-start1(): performing join
 start1(): exit status for child 3 is -3
-quit() has been called while process has living children, halting...
+start1(): performing join
+check_deadlock processes still exist.. halting
+
 starting test 17 ....
 
 TEST:Getpid passed. 3 3
 TEST:Getpid passed. 4 4
 TEST:Getpid passed. 5 5
 TEST:exit getpid test.
-All processes completed
+All processes completed.
 
 starting test 18 ....
 
@@ -852,15 +992,15 @@ XXp2(): 8 zapping XXp3
 XXp2(): 9 zapping XXp3
 XXp3(): started
 XXp3(): count=10
-All processes completed
+check_deadlock processes still exist.. halting
 
 starting test 19 ....
 
-Process XXp1 could not be allocated
+Process XXp1 could not be allocated -- stack size too small.
 You got it!
-Process XXp1 could not be allocated
+Process XXp1 could not be allocated -- stack size too small.
 You got it!
-All processes completed
+All processes completed.
 
 starting test 20 ....
 
@@ -869,8 +1009,7 @@ TEST:pid is -1.
 TEST:pid is -1.
 TEST:pid is -1.
 TEST:pid is -1.
-TEST:pid is -1.
-All processes completed
+All processes completed.
 
 starting test 21 ....
 
@@ -884,7 +1023,12 @@ Program attempted to zap itself, process ID: 3
 starting test 22 ....
 
 start1(): started
-quit() has been called while process has living children, halting...
+Priority of program out of range, exiting...
+start1(): couldn't fork a child -- invalid priority
+Priority of program out of range, exiting...
+start1(): couldn't fork a child -- invalid priority
+All processes completed.
+
 starting test 23 ....
 
 start1(): started
@@ -966,6 +1110,353 @@ XXp1(): after unblocking 4, result = -2
 XXp1(): after unblocking 5, result = -2
 XXp1(): after unblocking 6, result = -2
 quit() has been called while process has living children, halting...
+starting test 26 ....
+
+start1(): started
+start1(): buf = `XXp2'
+start1(): after fork of child 3
+start1(): buf = `XXp3'
+start1(): after fork of child 4
+start1(): buf = `XXp4'
+start1(): after fork of child 5
+XXp1(): XXp2, started, pid = 3
+XXp1(): XXp3, started, pid = 4
+XXp1(): XXp4, started, pid = 5
+---------------
+PID	Parent	Priority	Status	Num Kids	Time Used	Name
+1	-1		6			READY	0			0			sentinel
+2	-1		1			JOIN BLOCKED	3			6			start1
+3	2		3			READY	0			179996			XXp1
+4	2		3			READY	0			199970			XXp1
+5	2		3			RUNNING	0			0			XXp1
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+---------------
+PID	Parent	Priority	Status	Num Kids	Time Used	Name
+1	-1		6			READY	0			0			sentinel
+2	-1		1			JOIN BLOCKED	3			6			start1
+3	2		3			READY	0			179996			XXp1
+4	2		3			READY	0			199970			XXp1
+5	2		3			RUNNING	0			0			XXp1
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+---------------
+PID	Parent	Priority	Status	Num Kids	Time Used	Name
+1	-1		6			READY	0			0			sentinel
+2	-1		1			JOIN BLOCKED	3			6			start1
+3	2		3			READY	0			179996			XXp1
+4	2		3			READY	0			199970			XXp1
+5	2		3			RUNNING	0			0			XXp1
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+XXp1(): exitting, pid = 3
+start1(): after join of child 3, status = -3
+XXp1(): exitting, pid = 4
+start1(): after join of child 4, status = -4
+XXp1(): exitting, pid = 5
+start1(): after join of child 5, status = -5
+start1(): buf = `XXp2'
+start1(): after fork of child 6
+start1(): buf = `XXp3'
+start1(): after fork of child 7
+start1(): buf = `XXp4'
+start1(): after fork of child 8
+XXp1(): XXp2, started, pid = 6
+XXp1(): XXp3, started, pid = 7
+XXp1(): XXp4, started, pid = 8
+---------------
+PID	Parent	Priority	Status	Num Kids	Time Used	Name
+1	-1		6			READY	0			0			sentinel
+2	-1		1			JOIN BLOCKED	6			27			start1
+6	2		3			READY	0			3429595			XXp1
+7	2		3			READY	0			3809545			XXp1
+8	2		3			RUNNING	0			6429334			XXp1
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+---------------
+PID	Parent	Priority	Status	Num Kids	Time Used	Name
+1	-1		6			READY	0			0			sentinel
+2	-1		1			JOIN BLOCKED	6			27			start1
+6	2		3			READY	0			3429595			XXp1
+7	2		3			READY	0			3809545			XXp1
+8	2		3			RUNNING	0			6429334			XXp1
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+---------------
+PID	Parent	Priority	Status	Num Kids	Time Used	Name
+1	-1		6			READY	0			0			sentinel
+2	-1		1			JOIN BLOCKED	6			27			start1
+6	2		3			READY	0			3429595			XXp1
+7	2		3			READY	0			3809545			XXp1
+8	2		3			RUNNING	0			6429334			XXp1
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+0	0		0			EMPTY	0			0			
+XXp1(): exitting, pid = 6
+start1(): after join of child 6, status = -6
+XXp1(): exitting, pid = 7
+start1(): after join of child 7, status = -7
+XXp1(): exitting, pid = 8
+start1(): after join of child 8, status = -8
+All processes completed.
+
 starting test 27 ....
 
 start1(): started
@@ -983,7 +1474,7 @@ XXp2(): arg = `XXp2'
 start1(): exit status for child 4 is -2
 start1(): performing third join, have no unjoined children
 start1(): value returned by join is -2 expected value was -2
-All processes completed
+All processes completed.
 
 starting test 28 ....
 
@@ -1018,7 +1509,7 @@ start1(): performing third join
 XXp3(): exit status for child 7 is -4
 XXp3(): performing second join
 XXp3(): exit status for child 8 is -4
-All processes completed
+check_deadlock processes still exist.. halting
 
 starting test 29 ....
 
@@ -1045,7 +1536,7 @@ XXp2(): return value of zap(5) is 0
 start1(): exit status for child -1 is -1
 start1(): performing third join
 start1(): exit status for child 4 is -2
-All processes completed
+All processes completed.
 
 starting test 30 ....
 
@@ -1123,7 +1614,7 @@ XXp2(): started
 XXp2(): arg = `XXp2'
 XXp2(): exiting by calling quit(-2)
 XXp3(): zap(4) returned: 0
-All processes completed
+check_deadlock processes still exist.. halting
 
 starting test 36 ....
 
@@ -1148,5 +1639,5 @@ XXp1(): exit status for child 4 is -2
 XXp1(): performing second join
 XXp1(): exit status for child 5 is -3
 start1(): exit status for child 3 is -1
-All processes completed
+check_deadlock processes still exist.. halting
 
