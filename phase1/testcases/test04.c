@@ -25,7 +25,7 @@ int start1(char *arg)
          printf("start1(): after join of child %d, status = %d\n",
          kidpid, status);
       }
-
+      int x = 0;
    }
    return 0;
 }

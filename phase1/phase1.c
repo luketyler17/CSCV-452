@@ -221,6 +221,7 @@ int fork1(char *name, int (*f)(char *), char *arg, int stacksize, int priority)
    else
       strcpy(ProcTable[proc_slot].start_arg, arg);
 
+   //initialize values to the procTable
    ProcTable[proc_slot].stack = (char *)malloc(stacksize);
    ProcTable[proc_slot].stacksize = stacksize;
    ProcTable[proc_slot].pid = next_pid++;
@@ -245,6 +246,7 @@ int fork1(char *name, int (*f)(char *), char *arg, int stacksize, int priority)
    }
    else
    {
+      // add child process to parents child_process ptr
       ProcTable[proc_slot].parent_pid = Current->pid;
       Current->kids++;
       ProcTable[proc_slot].parent_location = Current->proc_table_location;
@@ -255,6 +257,7 @@ int fork1(char *name, int (*f)(char *), char *arg, int stacksize, int priority)
       }
       else
       {
+         //add sibling process to the parent's process->child_proc_ptr->next_sibling_ptr
          proc_ptr child;
          child = Current->child_proc_ptr;
          while (child->next_sibling_ptr != NULL)
@@ -262,6 +265,7 @@ int fork1(char *name, int (*f)(char *), char *arg, int stacksize, int priority)
             child = child->next_sibling_ptr;
          }
          child->next_sibling_ptr = &ProcTable[proc_slot];
+         //what kid they are in the list of kid_codes is their kid_num - 0 indexed
          ProcTable[proc_slot].kid_num = Current->kids;
       }
    }
@@ -271,7 +275,7 @@ int fork1(char *name, int (*f)(char *), char *arg, int stacksize, int priority)
    add_next_process(&ProcTable[proc_slot]);
    // sort_readylist(&ProcTable[proc_slot]);
    enableInterrupts();
-   if (strcmp("start1", ProcTable[proc_slot].name) == 0)
+   if (strcmp("sentinel", ProcTable[proc_slot].name) != 0)
    {
       dispatcher();
    }
@@ -366,7 +370,9 @@ int join(int *code)
          }
       }
       // remove_from_block_list(&Blocked);
-      Blocked->status = READY;
+      //Blocked->status = READY;
+      //add_next_process(Blocked);
+      Blocked->kids--;
       //remove the child from the list of children, make the sibling the new child
       Current->child_proc_ptr = oldChild->next_sibling_ptr;
       oldChild->next_sibling_ptr = NULL;
@@ -407,12 +413,14 @@ void quit(int code)
    proc_ptr next_ptr;
    if (Current->parent_pid != -1)
    {
+      //iterate over proccess table to find parent so we can talk back to the parent about the quitting child
       while (ProcTable[i].pid != Current->parent_pid)
       {
          i++;
       }
       for (int j = 0; j < 7; j++)
       {
+         //check if blocking any processes on the blocked list
          next_ptr = BlockedList[j];
          while (next_ptr != NULL)
          {
@@ -469,6 +477,8 @@ void dispatcher(void)
          if (ReadyList[i] != NULL)
          {
             process_switch = 1;
+            Current->status = READY;
+            add_next_process(Current);
          }
       }
    }
@@ -479,17 +489,18 @@ void dispatcher(void)
    if (process_switch)
    {
       next_process = fetch_next_process();
-      next_process->status = RUNNING;
       if (Current != NULL)
       {
          pPreviousContext = &Current->currentContext;
       }
       if (pPreviousContext != NULL)
       {
+         // add time ran to process
          Current->lastRunTime = sys_clock();
          Current->total_time = Current->total_time + (Current->lastRunTime - Current->startTime);
       }
       Current = next_process;
+      Current->status = RUNNING;
       Current->startTime = sys_clock();
       enableInterrupts();
       context_switch(pPreviousContext, &(next_process->currentContext));
@@ -524,11 +535,13 @@ int sentinel(void *dummy)
 /* check to determine if deadlock has occurred... */
 static void check_deadlock()
 {
+   // if there is a process on the ready list it will appear in next_proc
    proc_ptr next_proc = fetch_next_process();
    if (next_proc == NULL)
    {
       for (int i = 0; i < 6; i++)
       {
+         //now check through the blocked list
          next_proc = BlockedList[i];
          if (next_proc != NULL)
          {
@@ -675,7 +688,7 @@ void dump_processes(void)
       // needs to be redone - relooked at
       if (ProcTable[i].status >= 10)
       {
-         status = "BLOCK ME";
+         printf("%d\t%d\t\t%d\t%d\t%d\t\t\t%d\t\t\t%s\n", ProcTable[i].pid, ProcTable[i].parent_pid, ProcTable[i].priority, ProcTable[i].status, ProcTable[i].kids, ProcTable[i].total_time, ProcTable[i].name);
       }
       else
       {
@@ -704,8 +717,8 @@ void dump_processes(void)
             status = "QUIT";
             break;
          }
+         printf("%d\t%d\t\t%d\t%s\t%d\t\t\t%d\t\t\t%s\n", ProcTable[i].pid, ProcTable[i].parent_pid, ProcTable[i].priority, status, ProcTable[i].kids, ProcTable[i].total_time, ProcTable[i].name);
       }
-      printf("%d\t%d\t\t%d\t\t\t%s\t%d\t\t\t%d\t\t\t%s\n", ProcTable[i].pid, ProcTable[i].parent_pid, ProcTable[i].priority, status, ProcTable[i].kids, ProcTable[i].total_time, ProcTable[i].name);
    }
 }
 
@@ -798,6 +811,18 @@ int block_me(int new_status)
    proc_ptr blocked = Current;
    blocked->status = new_status;
    add_next_process_blocked(blocked);
+   while(blocked->status == new_status)
+   {
+      if (blocked->zapped == 1)
+      {
+         //process was zapped while in block_me block
+         return -1;
+      }
+      else
+      {
+         dispatcher();
+      }
+   }
    return 0;
 }
 
@@ -815,12 +840,13 @@ int unblock_proc(int pid)
             return -2;
          }
          remove_from_block_list(&ProcTable[i]);
-         while (ProcTable[i].status != ZAP_BLOCK || ProcTable[i].status != QUIT)
+         ProcTable[i].status = READY;
+         while (ProcTable[i].status != ZAP_BLOCK && ProcTable[i].status != QUIT)
          {
             // unit process is quit, check to ensure process does not get zapped
             dispatcher();
          }
-         if (ProcTable[i].status != ZAP_BLOCK)
+         if (ProcTable[i].status == ZAP_BLOCK)
          {
             // calling process was zapped
             return -1;
