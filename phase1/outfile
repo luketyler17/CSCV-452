@@ -581,8 +581,8 @@ PID	Parent	Priority	Status	Num Kids	Time Used	Name
 0	0		0	EMPTY	0			0			
 0	0		0	EMPTY	0			0			
 0	0		0	EMPTY	0			0			
-XXp1(): exitting, pid = 5
 XXp1(): exitting, pid = 4
+XXp1(): exitting, pid = 5
 XXp1(): exitting, pid = 3
 start1(): after join of child 3, status = -3
 start1(): after join of child 4, status = -4
@@ -599,10 +599,10 @@ XXp1(): XXp4, started, pid = 8
 ---------------
 PID	Parent	Priority	Status	Num Kids	Time Used	Name
 1	-1		6	READY	0			0			sentinel
-2	-1		1	JOIN BLOCKED	5			15			start1
-6	2		3	READY	0			4639482			XXp2
-7	2		3	RUNNING	0			4269506			XXp3
-8	2		3	READY	0			4059590			XXp4
+2	-1		1	JOIN BLOCKED	5			13			start1
+6	2		3	READY	0			5189447			XXp2
+7	2		3	RUNNING	0			4609470			XXp3
+8	2		3	READY	0			4659529			XXp4
 0	0		0	EMPTY	0			0			
 0	0		0	EMPTY	0			0			
 0	0		0	EMPTY	0			0			
@@ -648,9 +648,9 @@ PID	Parent	Priority	Status	Num Kids	Time Used	Name
 0	0		0	EMPTY	0			0			
 0	0		0	EMPTY	0			0			
 0	0		0	EMPTY	0			0			
+XXp1(): exitting, pid = 8
 XXp1(): exitting, pid = 6
 start1(): after join of child 6, status = -6
-XXp1(): exitting, pid = 8
 XXp1(): exitting, pid = 7
 start1(): after join of child 7, status = -7
 start1(): after join of child 8, status = -8
@@ -1398,10 +1398,10 @@ XXp1(): XXp4, started, pid = 8
 ---------------
 PID	Parent	Priority	Status	Num Kids	Time Used	Name
 1	-1		6	READY	0			0			sentinel
-2	-1		1	JOIN BLOCKED	3			31			start1
-6	2		3	READY	0			3429586			XXp1
-7	2		3	READY	0			3599582			XXp1
-8	2		3	RUNNING	0			6449311			XXp1
+2	-1		1	JOIN BLOCKED	3			24			start1
+6	2		3	READY	0			2809664			XXp1
+7	2		3	READY	0			2999652			XXp1
+8	2		3	RUNNING	0			6269311			XXp1
 0	0		0	EMPTY	0			0			
 0	0		0	EMPTY	0			0			
 0	0		0	EMPTY	0			0			
@@ -1450,10 +1450,10 @@ PID	Parent	Priority	Status	Num Kids	Time Used	Name
 ---------------
 PID	Parent	Priority	Status	Num Kids	Time Used	Name
 1	-1		6	READY	0			0			sentinel
-2	-1		1	JOIN BLOCKED	3			31			start1
-6	2		3	READY	0			3429586			XXp1
-7	2		3	READY	0			3599582			XXp1
-8	2		3	RUNNING	0			6449311			XXp1
+2	-1		1	JOIN BLOCKED	3			24			start1
+6	2		3	READY	0			2809664			XXp1
+7	2		3	READY	0			2999652			XXp1
+8	2		3	RUNNING	0			6269311			XXp1
 0	0		0	EMPTY	0			0			
 0	0		0	EMPTY	0			0			
 0	0		0	EMPTY	0			0			
@@ -1502,10 +1502,10 @@ PID	Parent	Priority	Status	Num Kids	Time Used	Name
 ---------------
 PID	Parent	Priority	Status	Num Kids	Time Used	Name
 1	-1		6	READY	0			0			sentinel
-2	-1		1	JOIN BLOCKED	3			31			start1
-6	2		3	READY	0			3429586			XXp1
-7	2		3	READY	0			3599582			XXp1
-8	2		3	RUNNING	0			6449311			XXp1
+2	-1		1	JOIN BLOCKED	3			24			start1
+6	2		3	READY	0			2809664			XXp1
+7	2		3	READY	0			2999652			XXp1
+8	2		3	RUNNING	0			6269311			XXp1
 0	0		0	EMPTY	0			0			
 0	0		0	EMPTY	0			0			
 0	0		0	EMPTY	0			0			
@@ -1749,5 +1749,5 @@ XXp1(): exit status for child 4 is -2
 XXp1(): performing second join
 XXp1(): exit status for child 5 is -3
 start1(): exit status for child 3 is -1
-check_deadlock processes still exist.. halting
+All processes completed.
 
