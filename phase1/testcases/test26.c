@@ -34,16 +34,19 @@ int start1(char *arg)
 
 int XXp1(char *arg)
 {
-   int i;
+   long j;
+   long i;
+   long loopCount = 0x008fffffff;
+   long printAt = 0x0000ffffff;
 
    printf("XXp1(): %s, started, pid = %d\n", arg, getpid());
    if ( strcmp(arg, "XXp4") == 0 ) {
-      for (i = 0; i < 10000000; i++)
-         if ( i == 2500000 || i == 5000000 || i == 7500000)
+      for (i = 0; i < loopCount; i++)
+         if ( i == printAt || i == (printAt * 2) || i == (printAt * 3))
             dump_processes();
    }
    else {
-      for (i = 0; i < 10000000; i++)
+      for (i = 0; i < loopCount; i++)
          ;
    }
 
@@ -51,4 +54,3 @@ int XXp1(char *arg)
    quit(-getpid());
    return 0;
 }
-

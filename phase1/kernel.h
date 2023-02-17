@@ -19,6 +19,8 @@ struct proc_struct {
    int            status;                 /* READY, BLOCKED, QUIT, etc. */
  
    /* other fields as needed... */
+   proc_ptr       quit_children;          // children that have quit
+   int            quit_children_num;      // num of quit children
    int            total_time;             // amount of time used by the CPU
    int            startTime;              // time started by CPU - will change on each call
    int            lastRunTime;            // time ended by CPU
@@ -54,5 +56,7 @@ union psr_values {
 #define SENTINELPRIORITY LOWEST_PRIORITY
 #define QUIT 1
 #define READY 2
-#define BLOCKED 3
+#define JOIN_BLOCK 3
 #define RUNNING 4
+#define ZAP_BLOCK 5
+#define BLOCKED 6
