@@ -355,6 +355,11 @@ int join(int *code)
       console("Join() called in user mode. Halting...\n");
       halt(1);
    }
+   if (Current->zapped == 1)
+   {
+      *code = oldChild->quit_code;
+      return -1;
+   }
    if (oldChild == NULL)
    {
       return -2;
@@ -670,6 +675,7 @@ int zap(int pid)
    if (zapped_proc->status == QUIT)
    {
       // if the process quit before we zapped, no need to dispatch
+      zapped_proc->zapped = 0;
       remove_from_block_list_no_add(blocked_ptr);
       return 0;
    }
@@ -678,7 +684,7 @@ int zap(int pid)
       blocked_ptr->status = ZAP_BLOCK;
       if (blocked_ptr->zapped == 1)
       {
-
+         zapped_proc->zapped = 0;
          return -1;
       }
       else
@@ -686,6 +692,7 @@ int zap(int pid)
          dispatcher();
       }
    }
+   zapped_proc->zapped = 0;
    return 0;
 }
 
