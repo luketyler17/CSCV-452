@@ -1,0 +1,1340 @@
+starting test 00 ....
+
+start1(): started
+start1(): after fork of child 3
+start1(): performing join
+XXp1(): started
+XXp1(): arg = `XXp1'
+start1(): exit status for child 3 is -3
+All processes completed.
+
+starting test 01 ....
+
+start1(): started
+start1(): after fork of child 3
+start1(): after fork of child 4
+start1(): performing first join
+XXp1(): started
+XXp1(): arg = `XXp1'
+start1(): exit status for child 3 is -3
+start1(): performing second join
+XXp2(): started
+XXp2(): arg = `XXp2'
+start1(): exit status for child 4 is 5
+All processes completed.
+
+starting test 02 ....
+
+start1(): started
+start1(): after fork of child 3
+start1(): performing join
+XXp1(): started
+XXp1(): arg = `XXp1'
+XXp1(): executing fork of first child
+XXp2(): started
+XXp2(): arg = `XXp2'
+XXp1(): fork1 of first child returned pid = 4
+XXp1(): executing fork of second child
+XXp2(): started
+XXp2(): arg = `XXp2'
+XXp1(): fork1 of second child returned pid = 5
+XXp1(): first join returned kid_pid = 4, status = 5
+XXp1(): second join returned kid_pid = 5, status = 5
+start1(): exit status for child 3 is -3
+All processes completed.
+
+starting test 03 ....
+
+start1(): started
+start1(): after fork of child 3
+start1(): performing join
+PID	Parent	Priority	Status	Num Kids	Time Used	Name
+0	0		0	EMPTY	0			0			
+1	-1		6	READY	0			0			sentinel
+2	-1		1	RUNNING	1			0			start1
+3	2		3	READY	0			0			XXp1
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+XXp1(): started, pid = 3
+XXp1(): arg = `XXp1'
+XXp1(): executing fork of first child
+XXp1(): fork1 of first child returned pid = 4
+XXp1(): executing fork of second child
+XXp1(): fork1 of second child returned pid = 5
+XXp1(): zap'ing first child
+XXp2(): started, pid = 4
+XXp2(): arg = `XXp2'
+XXp1(): after zap'ing first child, status = 0
+XXp1(): zap'ing second child
+XXp2(): started, pid = 5
+XXp2(): arg = `XXp2'
+XXp1(): after zap'ing second child, status = 0
+XXp1(): performing join's
+XXp1(): first join returned kid_pid = 4, status = 5
+XXp1(): second join returned kid_pid = 5, status = 5
+start1(): exit status for child 3 is -3
+All processes completed.
+
+starting test 05 ....
+
+start1(): started
+start1(): buf = `XXp2'
+start1(): after fork of child 3
+start1(): buf = `XXp3'
+start1(): after fork of child 4
+start1(): buf = `XXp4'
+start1(): after fork of child 5
+XXp1(): XXp2, started, pid = 3
+XXp1(): exitting, pid = 3
+start1(): after join of child 3, status = -3
+XXp1(): XXp3, started, pid = 4
+PID	Parent	Priority	Status	Num Kids	Time Used	Name
+0	0		0	EMPTY	0			0			
+1	-1		6	READY	0			0			sentinel
+2	-1		1	JOIN BLOCKED	2			12			start1
+3	2		3	QUIT	0			9992			XXp1
+4	2		3	RUNNING	0			0			XXp1
+5	2		3	READY	0			0			XXp1
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+XXp1(): exitting, pid = 4
+start1(): after join of child 4, status = -4
+XXp1(): XXp4, started, pid = 5
+XXp1(): exitting, pid = 5
+start1(): after join of child 5, status = -5
+start1(): buf = `XXp2'
+start1(): after fork of child 6
+start1(): buf = `XXp3'
+start1(): after fork of child 7
+start1(): buf = `XXp4'
+start1(): after fork of child 8
+XXp1(): XXp2, started, pid = 6
+XXp1(): exitting, pid = 6
+start1(): after join of child 6, status = -6
+XXp1(): XXp3, started, pid = 7
+PID	Parent	Priority	Status	Num Kids	Time Used	Name
+0	0		0	EMPTY	0			0			
+1	-1		6	READY	0			0			sentinel
+2	-1		1	JOIN BLOCKED	2			31			start1
+3	2		3	QUIT	0			9992			XXp1
+4	2		3	QUIT	0			19984			XXp1
+5	2		3	QUIT	0			9975			XXp1
+6	2		3	QUIT	0			19979			XXp1
+7	2		3	RUNNING	0			0			XXp1
+8	2		3	READY	0			0			XXp1
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+XXp1(): exitting, pid = 7
+start1(): after join of child 7, status = -7
+XXp1(): XXp4, started, pid = 8
+XXp1(): exitting, pid = 8
+start1(): after join of child 8, status = -8
+All processes completed.
+
+starting test 06 ....
+
+START1: calling fork1 for XXp1
+START1: calling zap
+XXp1: started
+XXp1: calling quit
+START1: zap_result = 0
+All processes completed.
+
+starting test 07 ....
+
+start1(): started
+start1(): after fork of child 3
+XXp1(): started
+XXp1(): arg = `XXp1'
+XXp2(): started
+XXp2(): arg = `XXp2'
+XXp1(): after fork of child 4
+XXp1(): exit status for child 4 is 5
+start1(): exit status for child 3 is -3
+All processes completed.
+
+starting test 08 ....
+
+start1(): started
+start1(): after fork of child 3
+start1(): performing join
+XXp1(): started
+XXp1(): arg = `XXp1'
+XXp1(): executing fork of first child
+XXp1(): fork1 of first child returned pid = 4
+XXp1(): executing fork of second child
+XXp1(): fork1 of second child returned pid = 5
+XXp2(): started
+XXp2(): arg = `XXp2'
+XXp1(): first join returned kid_pid = 4, status = 5
+XXp2(): started
+XXp2(): arg = `XXp2'
+XXp1(): second join returned kid_pid = 5, status = 5
+start1(): exit status for child 3 is -3
+All processes completed.
+
+starting test 09 ....
+
+start1(): started
+start1(): after fork of child 3
+quit() has been called while process has living children, halting...
+
+starting test 10 ....
+
+start1(): started
+start1(): after fork of child 3
+start1(): performing join
+XXp1(): started
+XXp1(): arg = `XXp1'
+XXp1(): about to zap parent -- should result in deadlock
+check_deadlock processes still exist.. halting
+
+starting test 11 ....
+
+start1(): started
+Kernel Error: Not in kernel mode, may not disable interrupts
+SIMULATOR TRAP: privileged instruction (USLOSS halt)
+
+starting test 12 ....
+
+start1(): started
+start1(): after fork of child 3
+start1(): performing join
+XXp1(): started
+XXp1(): arg = `XXp1'
+Quit() called in user mode. Halting...
+SIMULATOR TRAP: privileged instruction (USLOSS halt)
+
+starting test 13 ....
+
+start1(): started
+start1(): after fork of child 3
+start1(): after fork of child 4
+start1(): performing join
+XXp1(): started
+XXp1(): arg = `XXp1'
+XXp1(): executing fork of first child
+XXp1(): fork1 of first child returned pid = 5
+XXp1(): joining with first child
+XXp2(): started
+XXp2(): zap'ing child with pid_e 
+XXp3(): started
+PID	Parent	Priority	Status	Num Kids	Time Used	Name
+0	0		0	EMPTY	0			0			
+1	-1		6	READY	0			0			sentinel
+2	-1		1	JOIN BLOCKED	2			6			start1
+3	2		3	JOIN BLOCKED	1			5			XXp1
+4	2		4	ZAP BLOCKED	0			5			XXp2
+5	3		5	RUNNING	0			0			XXp3
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+XXp1(): join returned kid_pid = 5, status = 5
+start1(): exit status for child 3 is -3
+start1(): performing join
+XXp2(): after zap'ing child with pid_e, status = 0
+start1(): exit status for child 4 is 5
+All processes completed.
+
+starting test 14 ....
+
+start1(): started
+start1(): after fork of child 3
+start1(): after fork of child 4
+start1(): performing join
+XXp1(): started
+XXp1(): arg = `XXp1'
+XXp1(): executing fork of first child
+XXp1(): fork1 of first child returned pid = 5
+XXp1(): joining with first child
+XXp2(): started
+XXp2(): zap'ing process with pid_z 
+XXp3(): started
+PID	Parent	Priority	Status	Num Kids	Time Used	Name
+0	0		0	EMPTY	0			0			
+1	-1		6	READY	0			0			sentinel
+2	-1		1	JOIN BLOCKED	2			6			start1
+3	2		3	JOIN BLOCKED	1			5			XXp1
+4	2		4	ZAP BLOCKED	0			5			XXp2
+5	3		5	RUNNING	0			0			XXp3
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+XXp1(): was zapped while it was blocked on join
+start1(): exit status for child 3 is -3
+start1(): performing join
+XXp2(): after zap'ing process with pid_z, status = 0
+start1(): exit status for child 4 is 5
+All processes completed.
+
+starting test 15 ....
+
+start1(): started
+start1(): after fork of child 3
+start1(): after fork of child 4
+start1(): performing join
+XXp1(): started
+XXp1(): arg = `XXp1'
+XXp1(): executing fork of first child
+XXp1(): fork1 of first child returned pid = 5
+XXp1(): zap'ing process with pid_z 
+XXp2(): started
+XXp2(): zap'ing process with pid_z 
+XXp3(): started
+PID	Parent	Priority	Status	Num Kids	Time Used	Name
+0	0		0	EMPTY	0			0			
+1	-1		6	READY	0			0			sentinel
+2	-1		1	JOIN BLOCKED	2			6			start1
+3	2		3	ZAP BLOCKED	1			5			XXp1
+4	2		4	ZAP BLOCKED	0			5			XXp2
+5	3		5	RUNNING	0			0			XXp3
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+XXp1(): after zap'ing process with pid_z, status = 0
+XXp1(): joining with first child
+XXp1(): join returned kid_pid = 5, status = 5
+start1(): exit status for child 3 is -3
+start1(): performing join
+XXp2(): after zap'ing process with pid_z, status = 0
+start1(): exit status for child 4 is 5
+All processes completed.
+
+starting test 16 ....
+
+start1(): started
+start1(): after fork of child 3
+start1(): after fork of child 4
+start1(): performing join
+XXp1(): started
+XXp1(): arg = `XXp1'
+XXp1(): executing fork of first child
+XXp1(): fork1 of first child returned pid = 5
+XXp1(): zap'ing process with 5
+XXp2(): started
+XXp2(): zap'ing process with pid = 3 
+XXp3(): started
+PID	Parent	Priority	Status	Num Kids	Time Used	Name
+0	0		0	EMPTY	0			0			
+1	-1		6	READY	0			0			sentinel
+2	-1		1	JOIN BLOCKED	2			6			start1
+3	2		3	ZAP BLOCKED	1			5			XXp1
+4	2		4	ZAP BLOCKED	0			5			XXp2
+5	3		5	RUNNING	0			0			XXp3
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+XXp1(): after zap'ing process with pid = 5, XXp1 was zapped while blocked on zap
+XXp1(): joining with first child
+XXp1(): was zapped while it was blocked on join
+start1(): exit status for child 3 is -3
+start1(): performing join
+XXp2(): after zap'ing process with pid = 3, status = 0
+start1(): exit status for child 4 is 5
+All processes completed.
+
+starting test 17 ....
+
+TEST:Getpid passed. 3 3
+TEST:Getpid passed. 4 4
+TEST:Getpid passed. 5 5
+TEST:exit getpid test.
+All processes completed.
+
+starting test 18 ....
+
+start1(): started
+XXp2(): 0 zapping XXp3
+XXp2(): 1 zapping XXp3
+XXp2(): 2 zapping XXp3
+XXp2(): 3 zapping XXp3
+XXp2(): 4 zapping XXp3
+XXp2(): 5 zapping XXp3
+XXp2(): 6 zapping XXp3
+XXp2(): 7 zapping XXp3
+XXp2(): 8 zapping XXp3
+XXp2(): 9 zapping XXp3
+XXp3(): started
+XXp3(): count=10
+XXp2(): 0 after zap
+XXp2(): 1 after zap
+XXp2(): 2 after zap
+XXp2(): 3 after zap
+XXp2(): 4 after zap
+XXp2(): 5 after zap
+XXp2(): 6 after zap
+XXp2(): 7 after zap
+XXp2(): 8 after zap
+XXp2(): 9 after zap
+start1(): calling quit
+All processes completed.
+
+starting test 19 ....
+
+You got it!
+You got it!
+All processes completed.
+
+starting test 20 ....
+
+TEST:start 50 processes
+TEST:pid is -1.
+TEST:pid is -1.
+TEST:pid is -1.
+TEST:pid is -1.
+All processes completed.
+
+starting test 21 ....
+
+start1(): started
+start1(): after fork of child 3
+start1(): performing join
+XXp1(): started
+XXp1(): arg = `XXp1'
+Program attempted to zap itself, process ID: 3 
+
+starting test 22 ....
+
+start1(): started
+start1(): couldn't fork a child -- invalid priority
+start1(): couldn't fork a child -- invalid priority
+All processes completed.
+
+starting test 23 ....
+
+start1(): started
+XXp1(): creating children
+XXp2(): started, pid = 4, calling block_me
+XXp2(): started, pid = 5, calling block_me
+XXp2(): started, pid = 6, calling block_me
+PID	Parent	Priority	Status	Num Kids	Time Used	Name
+0	0		0	EMPTY	0			0			
+1	-1		6	READY	0			0			sentinel
+2	-1		1	JOIN BLOCKED	1			6			start1
+3	2		5	RUNNING	3			19			XXp1
+4	3		3	13	0			5			XXp2
+5	3		3	13	0			6			XXp2
+6	3		3	13	0			9			XXp2
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+XXp1(): unblocking children
+XXp2(): pid = 4, after block_me, result = 0
+XXp2(): pid = 5, after block_me, result = 0
+XXp2(): pid = 6, after block_me, result = 0
+XXp1(): after unblocking 4, result = 0
+XXp1(): after unblocking 5, result = 0
+XXp1(): after unblocking 6, result = 0
+XXp1 done; returning...
+All processes completed.
+
+starting test 24 ....
+
+start1(): started
+XXp1(): creating children
+XXp2(): started, pid = 4, calling block_me
+XXp2(): started, pid = 5, calling block_me
+XXp2(): started, pid = 6, calling block_me
+XXp1(): creating zapper child
+XXp3(): started, pid = 7, calling zap on pid 5
+XXp1(): unblocking children
+XXp2(): pid = 4, after block_me, result = 0
+XXp2(): pid = 4, is_zapped() = 0
+XXp2(): pid = 5, after block_me, result = -1
+XXp2(): pid = 5, is_zapped() = 1
+XXp3(): after call to zap, result of zap = 0
+XXp2(): pid = 6, after block_me, result = 0
+XXp2(): pid = 6, is_zapped() = 0
+XXp1(): after unblocking 4, result = 0
+XXp1(): after unblocking 5, result = 0
+XXp1(): after unblocking 6, result = 0
+XXp1 done; returning...
+All processes completed.
+
+starting test 25 ....
+
+start1(): started
+XXp1(): creating children
+XXp2(): started, pid = 4, calling block_me
+XXp2(): started, pid = 5, calling block_me
+XXp2(): started, pid = 6, calling block_me
+XXp1(): creating zapper children
+XXp3(): started, pid = 7, calling zap on pid 5
+XXp4(): started, pid = 8, calling zap on pid 7
+XXp1(): unblocking children
+XXp2(): pid = 4, after block_me, result = 0
+XXp2(): pid = 4, is_zapped() = 0
+XXp2(): pid = 5, after block_me, result = -1
+XXp2(): pid = 5, is_zapped() = 1
+XXp3(): after call to zap, result of zap = -1
+XXp4(): after call to zap, result of zap = 0
+XXp2(): pid = 6, after block_me, result = 0
+XXp2(): pid = 6, is_zapped() = 0
+XXp1(): after unblocking 4, result = 0
+XXp1(): after unblocking 5, result = 0
+XXp1(): after unblocking 6, result = 0
+XXp1 done; returning...
+All processes completed.
+
+starting test 26 ....
+
+start1(): started
+start1(): buf = `XXp2'
+start1(): after fork of child 3
+start1(): buf = `XXp3'
+start1(): after fork of child 4
+start1(): buf = `XXp4'
+start1(): after fork of child 5
+XXp1(): XXp2, started, pid = 3
+XXp1(): exitting, pid = 3
+start1(): after join of child 3, status = -3
+XXp1(): XXp3, started, pid = 4
+XXp1(): exitting, pid = 4
+start1(): after join of child 4, status = -4
+XXp1(): XXp4, started, pid = 5
+PID	Parent	Priority	Status	Num Kids	Time Used	Name
+0	0		0	EMPTY	0			0			
+1	-1		6	READY	0			0			sentinel
+2	-1		1	JOIN BLOCKED	1			19			start1
+3	2		3	QUIT	0			9992			XXp1
+4	2		3	QUIT	0			9978			XXp1
+5	2		3	RUNNING	0			0			XXp1
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+PID	Parent	Priority	Status	Num Kids	Time Used	Name
+0	0		0	EMPTY	0			0			
+1	-1		6	READY	0			0			sentinel
+2	-1		1	JOIN BLOCKED	1			19			start1
+3	2		3	QUIT	0			9992			XXp1
+4	2		3	QUIT	0			9978			XXp1
+5	2		3	RUNNING	0			0			XXp1
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+PID	Parent	Priority	Status	Num Kids	Time Used	Name
+0	0		0	EMPTY	0			0			
+1	-1		6	READY	0			0			sentinel
+2	-1		1	JOIN BLOCKED	1			19			start1
+3	2		3	QUIT	0			9992			XXp1
+4	2		3	QUIT	0			9978			XXp1
+5	2		3	RUNNING	0			0			XXp1
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+XXp1(): exitting, pid = 5
+start1(): after join of child 5, status = -5
+start1(): buf = `XXp2'
+start1(): after fork of child 6
+start1(): buf = `XXp3'
+start1(): after fork of child 7
+start1(): buf = `XXp4'
+start1(): after fork of child 8
+XXp1(): XXp2, started, pid = 6
+XXp1(): exitting, pid = 6
+start1(): after join of child 6, status = -6
+XXp1(): XXp3, started, pid = 7
+XXp1(): exitting, pid = 7
+start1(): after join of child 7, status = -7
+XXp1(): XXp4, started, pid = 8
+PID	Parent	Priority	Status	Num Kids	Time Used	Name
+0	0		0	EMPTY	0			0			
+1	-1		6	READY	0			0			sentinel
+2	-1		1	JOIN BLOCKED	1			35			start1
+3	2		3	QUIT	0			9992			XXp1
+4	2		3	QUIT	0			9978			XXp1
+5	2		3	QUIT	0			29988			XXp1
+6	2		3	QUIT	0			9973			XXp1
+7	2		3	QUIT	0			19982			XXp1
+8	2		3	RUNNING	0			0			XXp1
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+PID	Parent	Priority	Status	Num Kids	Time Used	Name
+0	0		0	EMPTY	0			0			
+1	-1		6	READY	0			0			sentinel
+2	-1		1	JOIN BLOCKED	1			35			start1
+3	2		3	QUIT	0			9992			XXp1
+4	2		3	QUIT	0			9978			XXp1
+5	2		3	QUIT	0			29988			XXp1
+6	2		3	QUIT	0			9973			XXp1
+7	2		3	QUIT	0			19982			XXp1
+8	2		3	RUNNING	0			0			XXp1
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+PID	Parent	Priority	Status	Num Kids	Time Used	Name
+0	0		0	EMPTY	0			0			
+1	-1		6	READY	0			0			sentinel
+2	-1		1	JOIN BLOCKED	1			35			start1
+3	2		3	QUIT	0			9992			XXp1
+4	2		3	QUIT	0			9978			XXp1
+5	2		3	QUIT	0			29988			XXp1
+6	2		3	QUIT	0			9973			XXp1
+7	2		3	QUIT	0			19982			XXp1
+8	2		3	RUNNING	0			0			XXp1
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+0	0		0	EMPTY	0			0			
+XXp1(): exitting, pid = 8
+start1(): after join of child 8, status = -8
+All processes completed.
+
+starting test 27 ....
+
+start1(): started
+start1(): after fork of child 3
+start1(): after fork of child 4
+start1(): performing first join
+XXp1(): started
+XXp1(): arg = `XXp1'
+XXp1(): performing join with no children
+XXp1(): value returned by join is -2 expected value was -2
+start1(): exit status for child 3 is -1
+start1(): performing second join
+XXp2(): started
+XXp2(): arg = `XXp2'
+start1(): exit status for child 4 is -2
+start1(): performing third join, have no unjoined children
+start1(): value returned by join is -2 expected value was -2
+All processes completed.
+
+starting test 28 ....
+
+start1(): started
+start1(): after fork of child 3
+start1(): after fork of child 4
+start1(): after fork of child 5
+start1(): performing first join
+XXp1(): started
+XXp1(): arg = `XXp1'
+XXp4(): started
+XXp4(): arg = `XXp4FromXXp1'
+XXp2(): started
+XXp2(): arg = `XXp2'
+XXp2(): calling zap(5)
+XXp3(): started
+XXp3(): arg = `XXp3'
+XXp4(): started
+XXp4(): arg = `XXp4FromXXp3a'
+XXp1(): after fork of child 6
+XXp1(): performing first join
+XXp1(): exit status for child 6 is -4
+start1(): exit status for child 3 is -1
+start1(): performing second join
+XXp3(): after fork of child 7
+XXp4(): started
+XXp4(): arg = `XXp4FromXXp3b'
+XXp3(): after fork of child 8
+XXp3(): performing first join
+XXp3(): exit status for child -1 is -4
+XXp3(): performing second join
+XXp3(): exit status for child -1 is -4
+start1(): exit status for child 5 is -3
+start1(): performing third join
+XXp2(): return value of zap(5) is 0
+start1(): exit status for child 4 is -2
+All processes completed.
+
+starting test 29 ....
+
+start1(): started
+start1(): after fork of child 3
+start1(): after fork of child 4
+start1(): after fork of child 5
+start1(): performing first join
+XXp1(): started
+XXp1(): arg = `XXp1'
+start1(): exit status for child 3 is -1
+start1(): performing second join
+XXp2(): started
+XXp2(): arg = `XXp2'
+XXp2(): calling zap(5)
+XXp3(): started
+XXp3(): arg = `XXp3'
+XXp3(): after fork of child 6
+XXp3(): performing first join
+XXp4(): started
+XXp4(): arg = `XXp4FromXXp3a'
+XXp3(): exit status for child -1 is -4
+start1(): exit status for child 5 is -3
+start1(): performing third join
+XXp2(): return value of zap(5) is 0
+start1(): exit status for child 4 is -2
+All processes completed.
+
+starting test 30 ....
+
+start1(): started
+start1(): after fork of child 3
+start1(): after fork of child 4
+start1(): performing first join
+XXp1(): started
+XXp1(): arg = `XXp1'
+XXp1(): after fork of child 5
+XXp1(): performing first join at this point is_zapped() returns: 0
+XXp2(): started
+XXp2(): arg = `XXp2'
+XXp2(): calling zap(3)
+XXp3(): started
+XXp3(): arg = `XXp3FromXXp1'
+XXp1(): exit status for child -1 is -3
+XXp1():at this point is_zapped() returns: 1
+start1(): exit status for child 3 is -1
+start1(): performing second join
+XXp2(): return value of zap(3) is 0
+start1(): exit status for child 4 is -2
+All processes completed.
+
+starting test 31 ....
+
+start1(): started
+start1(): after fork of child 3
+start1(): performing first join
+XXp1(): started
+XXp1(): arg = `XXp1'
+XXp1(): zapping myself, should cause abort, calling zap(3)
+Program attempted to zap itself, process ID: 3 
+
+starting test 32 ....
+
+start1(): started
+start1(): after fork of child 3
+start1(): zapping myself, should cause abort, calling zap(2)
+Program attempted to zap itself, process ID: 2 
+
+starting test 33 ....
+
+start1(): started
+start1(): after fork of child 3
+start1(): performing first join
+XXp1(): started pid=3
+XXp1(): arg = `XXp1'
+XXp1(): zapping a non existant processes pid, should cause abort, calling zap(4)
+Program attempt to zap program that does not exist! Calling - Process ID 3, Pid to zap 4
+
+starting test 34 ....
+
+start1(): started
+start1(): after fork of child 3
+start1(): after fork of child 4
+start1(): performing first join
+XXp1(): started
+XXp1(): arg = `XXp1'
+XXp1(): zapping a non existant processes pid, should cause abort, calling zap(204)
+Program attempt to zap program that does not exist! Calling - Process ID 3, Pid to zap 204
+
+starting test 35 ....
+
+start1(): started
+start1(): after fork of child 3
+start1(): performing first join
+XXp1(): started
+XXp1(): arg = `XXp1'
+XXp2(): started
+XXp2(): arg = `XXp2'
+XXp2(): exiting by calling quit(-2)
+XXp1(): after fork of child 4
+XXp3(): started
+XXp3(): arg = `XXp3'
+XXp3(): calling zap(4)
+XXp3(): zap(4) returned: 0
+XXp1(): after fork of child 5
+XXp1(): performing first join
+XXp1(): exit status for child 4 is -2
+XXp1(): performing second join
+XXp1(): exit status for child 5 is -3
+start1(): exit status for child 3 is -1
+All processes completed.
+
+starting test 36 ....
+
+start1(): started
+start1(): after fork of child 3
+start1(): performing first join
+XXp1(): started
+XXp1(): arg = `XXp1'
+XXp2(): started
+XXp2(): arg = `XXp2'
+XXp2(): exiting by calling quit(-2)
+XXp1(): after fork of child 4
+XXp1(): after fork of child 5
+XXp1(): calling zap(5)
+XXp3(): started
+XXp3(): arg = `XXp3'
+XXp3(): calling zap(4)
+XXp3(): zap(4) returned: 0
+XXp1(): zap(5) returned: 0
+XXp1(): performing first join
+XXp1(): exit status for child 4 is -2
+XXp1(): performing second join
+XXp1(): exit status for child 5 is -3
+start1(): exit status for child 3 is -1
+All processes completed.
+

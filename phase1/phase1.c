@@ -107,6 +107,7 @@ void startup()
       ProcTable[i].parent_location = NULL;     // parent location on process table
       ProcTable[i].blocked_by = NULL;          // pid of process blocking current proccess
       ProcTable[i].status = 0;
+      ProcTable[i].quit_children_num = 0;
    }
 
    /* Initialize the Ready list, etc. */
@@ -186,25 +187,21 @@ int fork1(char *name, int (*f)(char *), char *arg, int stacksize, int priority)
    /* Return if stack size is too small */
    if (stacksize < USLOSS_MIN_STACK)
    {
-      console("Process %s could not be allocated -- stack size too small.\n", name);
       return (-2);
    }
    /*Return if function pointer is NULL*/
    if (f == NULL)
    {
-      console("Function pointer invalid, exiting...\n");
       return (-1);
    }
    /*Return if name is NULL*/
    if (name == NULL)
    {
-      console("Program name invalid, exiting....\n");
       return (-1);
    }
    /*Return if Priority is out of range*/
    if (strcmp(name, "sentinel") && (priority < 1 || priority > 5))
    {
-      console("Priority of program out of range, exiting...\n");
       return (-1);
    }
    /* Return if maximum processes reached */
@@ -349,68 +346,72 @@ void launch()
    ------------------------------------------------------------------------ */
 int join(int *code)
 {
+
    proc_ptr oldChild = Current->child_proc_ptr;
+
    if (!(kernel_or_user()))
    {
       console("Join() called in user mode. Halting...\n");
       halt(1);
    }
-   if (Current->zapped == 1)
-   {
-      *code = oldChild->quit_code;
-      return -1;
-   }
+   // if (Current->zapped == 1)
+   // {
+   //    *code = oldChild->quit_code;
+   //    return -1;
+   // }
    if (oldChild == NULL)
    {
       return -2;
    }
    if (oldChild->status == QUIT)
    {
-
+      if (Current->zapped == 1)
+      {
+         *code = oldChild->quit_code;
+         return -1;
+      }
       *code = oldChild->quit_code;
       Current->child_proc_ptr = oldChild->next_sibling_ptr;
       return oldChild->pid;
    }
    else
    {
-
       // current process is now going to be blocked by the join
       Blocked = Current;
       Blocked->status = JOIN_BLOCK;
       // add process into blocked_list
       add_next_process_blocked(Blocked);
       // until the child quits, continue running dispatcher until the child runs and quits
-
       Blocked->blocked_by = oldChild->pid;
       dispatcher();
-      if (Blocked->zapped == 1)
+      if (Current->zapped == 1)
       {
-         // if zapped during join, return -2
+         // if zapped during join, return -1
          Current->child_proc_ptr = oldChild->next_sibling_ptr;
          oldChild->next_sibling_ptr = NULL;
+         *code = oldChild->quit_code;
          return -1;
       }
-      /*
-      while (oldChild->status != QUIT)
-      {
-         // let the blocked program know that it is being blocked by a child process, then dispatch
-         Blocked->blocked_by = oldChild->pid;
-         dispatcher();
-         if (Blocked->zapped == 1)
-         {
-            // if zapped during join, return -2
-            Current->child_proc_ptr = oldChild->next_sibling_ptr;
-            oldChild->next_sibling_ptr = NULL;
-            return -1;
-         }
-      }
-      */
       Blocked->kids--;
       // remove the child from the list of children, make the sibling the new child
-      Current->child_proc_ptr = oldChild->next_sibling_ptr;
-      oldChild->next_sibling_ptr = NULL;
-      *code = oldChild->quit_code;
-      return oldChild->pid;
+      //find the child that quit and remove them from the process list
+      proc_ptr quitChild = Current->child_proc_ptr;
+      proc_ptr pPrevious = NULL;
+      while(quitChild->status != QUIT)
+      {
+         pPrevious = quitChild;
+         quitChild = quitChild->next_sibling_ptr;
+      }
+      if (pPrevious != NULL && pPrevious->next_sibling_ptr != NULL)
+      {
+         pPrevious->next_sibling_ptr = quitChild->next_sibling_ptr;
+      }
+      else
+      {
+         Current->child_proc_ptr = quitChild->next_sibling_ptr;
+      }   
+      *code = quitChild->quit_code;
+      return quitChild->pid;
    }
 } /* join */
 
@@ -437,7 +438,7 @@ void quit(int code)
    }
    if (Current->child_proc_ptr != NULL && Current->child_proc_ptr->status != QUIT)
    {
-      console("quit() has been called while process has living children, halting...");
+      console("quit() has been called while process has living children, halting...\n");
       halt(1);
    }
    disableInterrupts();
@@ -450,6 +451,11 @@ void quit(int code)
       while (ProcTable[i].pid != Current->parent_pid)
       {
          i++;
+      }
+      if (ProcTable[i].status == JOIN_BLOCK)
+      {
+         ProcTable[i].status = READY;
+         remove_from_block_list(&ProcTable[i]);
       }
       for (int j = 0; j < 7; j++)
       {
@@ -470,6 +476,8 @@ void quit(int code)
          }
       }
       Current->quit_code = code;
+      ProcTable[i].quit_children = Current;
+      ProcTable[i].quit_children_num++;
       ProcTable[i].kids_status_list[Current->kid_num] = code;
       // ProcTable[i].status = READY;
       p1_quit(Current->pid);
@@ -685,9 +693,6 @@ int zap(int pid)
    proc_ptr zapped_proc = &ProcTable[i];
    blocked_ptr->blocked_by = zapped_proc->pid;
    zapped_proc->zapped = 1;
-
-   zapped_proc->zapped = 1;
-
    /*
    if (zapped_proc->status == QUIT)
    {
@@ -718,6 +723,7 @@ int zap(int pid)
    {
       // if the process quit before we zapped, no need to dispatch
       remove_from_block_list_no_add(blocked_ptr);
+      zapped_proc->zapped = 0;
       return 0;
    }
    /*
@@ -738,11 +744,12 @@ int zap(int pid)
 
    blocked_ptr->status = ZAP_BLOCK;
    dispatcher();
-   if (blocked_ptr->zapped == 1)
+   if (Current->zapped == 1)
    {
       return -1;
    }
-
+   
+   zapped_proc->zapped = 0;
    return 0;
 }
 
@@ -958,11 +965,16 @@ int unblock_proc(int pid)
          {
             return -2;
          }
+         if (ProcTable[i].pid == Current->pid)
+         {
+            // attempting to unblock itself
+            return -2;
+         }
          remove_from_block_list(&ProcTable[i]);
          ProcTable[i].status = READY;
          while (ProcTable[i].status != ZAP_BLOCK && ProcTable[i].status != QUIT)
          {
-            // unit process is quit, check to ensure process does not get zapped
+            // until process is quit, check to ensure process does not get zapped
             dispatcher();
          }
          if (ProcTable[i].status == ZAP_BLOCK)

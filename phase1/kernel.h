@@ -19,6 +19,8 @@ struct proc_struct {
    int            status;                 /* READY, BLOCKED, QUIT, etc. */
  
    /* other fields as needed... */
+   proc_ptr       quit_children;          // children that have quit
+   int            quit_children_num;      // num of quit children
    int            total_time;             // amount of time used by the CPU
    int            startTime;              // time started by CPU - will change on each call
    int            lastRunTime;            // time ended by CPU
