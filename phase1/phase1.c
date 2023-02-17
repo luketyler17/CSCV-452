@@ -88,24 +88,6 @@ void startup()
    /* initialize the process table */
    for (int i = 0; i < 50; i++)
    {
-      ProcTable[i].next_proc_ptr = NULL;
-      ProcTable[i].child_proc_ptr = NULL;
-      ProcTable[i].next_sibling_ptr = NULL;
-      ProcTable[i].pid = NULL;              /* process id */
-      ProcTable[i].priority = NULL;
-      ProcTable[i].stacksize = NULL;
-      ProcTable[i].status = NULL;      /* READY, BLOCKED, QUIT, etc. */
-      ProcTable[i].total_time = NULL;  // amount of time used by the CPU
-      ProcTable[i].startTime = NULL;   // time started by CPU - will change on each call
-      ProcTable[i].lastRunTime = NULL; // time ended by CPU
-      ProcTable[i].parent_pid = NULL;  /*IF -1 NO PARENT EXISTS*/
-      ProcTable[i].zapped = NULL;      // 1 == TRUE 0 == FALSE
-      ProcTable[i].kids = NULL;
-      ProcTable[i].kid_num = NULL;
-      ProcTable[i].quit_code = NULL;           // if quit, what code is it
-      ProcTable[i].proc_table_location = NULL; // location on process table
-      ProcTable[i].parent_location = NULL;     // parent location on process table
-      ProcTable[i].blocked_by = NULL;          // pid of process blocking current proccess
       ProcTable[i].status = 0;
    }
 
@@ -353,11 +335,12 @@ int join(int *code)
    }
    if (oldChild == NULL)
    {
+      // was no child, return -2
       return -2;
    }
    if (oldChild->status == QUIT)
    {
-
+      // child was quit before the join occured, return the quit_code into the memory location passed in
       *code = oldChild->quit_code;
       Current->child_proc_ptr = oldChild->next_sibling_ptr;
       return oldChild->pid;
@@ -447,17 +430,19 @@ void quit(int code)
             }
          }
       }
+
       Current->quit_code = code;
+
+      // add quit_code to the status list of the child
       ProcTable[i].kids_status_list[Current->kid_num] = code;
-      // ProcTable[i].status = READY;
       p1_quit(Current->pid);
-      // add_next_process(&ProcTable[i]);
       enableInterrupts();
       num_procs--;
       dispatcher();
    }
    else
    {
+      // process will exit into here in start1() or sentinel()
       num_procs--;
       enableInterrupts();
       dispatcher();
@@ -482,7 +467,7 @@ void dispatcher(void)
    if (Current != NULL && Current->status == RUNNING)
    {
       // make sure no other process is higher
-      for (int i = 0; i < Current->priority - 1; i++)
+      for (int i = 0; i <= Current->priority - 1; i++)
       {
          if (ReadyList[i] != NULL)
          {
@@ -587,6 +572,9 @@ void disableInterrupts()
       psr_set(psr_get() & ~PSR_CURRENT_INT);
 } /* disableInterrupts */
 
+/*
+   * Enables the interrupts.
+   */
 void enableInterrupts()
 {
    if (kernel_or_user() == 0)
@@ -685,27 +673,46 @@ int zap(int pid)
    return 0;
 }
 
+/*Return's value for current running process's Zapped field, if 0 -> not zapped, if 1 -> is zapped*/
 int is_zapped(void)
 {
    return Current->zapped;
 }
 
+/*Return's current running process's PID*/
 int getpid(void)
 {
    return Current->pid;
 }
 
+/*
+   Function iterates through process table to dump information about each process
+*/
 void dump_processes(void)
 {
    char *status;
    printf("---------------\n");
-   printf("PID\tParent\tPriority\tStatus\tNum Kids\tTime Used\tName\n");
+   printf("%-7s %-8s %-9s %-13s %-8s %-8s %-8s\n",
+            "PID",
+            "Parent",
+            "Priority",
+            "Status",
+            "Num Kids",
+            "Time Used",
+            "Name");
    for (int i = 0; i < 50; i++)
    {
       // needs to be redone - relooked at
       if (ProcTable[i].status >= 10)
       {
-         printf("%d\t%d\t\t%d\t%d\t%d\t\t\t%d\t\t\t%s\n", ProcTable[i].pid, ProcTable[i].parent_pid, ProcTable[i].priority, ProcTable[i].status, ProcTable[i].kids, ProcTable[i].total_time, ProcTable[i].name);
+         printf("%-7d %-8d %-9d %-13d %-8d %-8d %-8s\n", 
+         ProcTable[i].pid, 
+         ProcTable[i].parent_pid, 
+         ProcTable[i].priority, 
+         ProcTable[i].status, 
+         ProcTable[i].kids, 
+         ProcTable[i].total_time, 
+         ProcTable[i].name);
       }
       else
       {
@@ -734,7 +741,14 @@ void dump_processes(void)
             status = "QUIT";
             break;
          }
-         printf("%d\t%d\t\t%d\t%s\t%d\t\t\t%d\t\t\t%s\n", ProcTable[i].pid, ProcTable[i].parent_pid, ProcTable[i].priority, status, ProcTable[i].kids, ProcTable[i].total_time, ProcTable[i].name);
+         printf("%-7d %-8d %-9d %-13s %-8d %-8d %-8s\n", 
+               ProcTable[i].pid, 
+               ProcTable[i].parent_pid, 
+               ProcTable[i].priority, 
+               status, 
+               ProcTable[i].kids, 
+               ProcTable[i].total_time, 
+               ProcTable[i].name);
       }
    }
 }
@@ -861,6 +875,7 @@ int block_me(int new_status)
    add_next_process_blocked(blocked);
    while (blocked->status == new_status)
    {
+      // continues dispatching until the process's status changes to anything
       if (blocked->zapped == 1)
       {
          // process was zapped while in block_me block
@@ -873,6 +888,7 @@ int block_me(int new_status)
    }
    return 0;
 }
+
 /*
    Unblocks the process input by the PID, looks for it on the process table and ensures that it is blocked by
    block_me and not join/zap bock
