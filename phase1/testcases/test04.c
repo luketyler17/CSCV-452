@@ -13,6 +13,10 @@ int start1(char *arg)
    printf("start1(): started\n");
 
    for (j = 0; j < 2; j++) {
+      if (j == 1)
+      {
+         printf("hello world");
+      }
       for (i = 2; i < MAXPROC; i++) {
          kidpid = fork1("XXp1", XXp1, "XXp1", USLOSS_MIN_STACK, 3);
          printf("start1(): after fork of child %d\n", kidpid);

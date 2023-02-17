@@ -245,6 +245,14 @@ int fork1(char *name, int (*f)(char *), char *arg, int stacksize, int priority)
    ProcTable[proc_slot].status = READY;
    ProcTable[proc_slot].proc_table_location = proc_slot;
    ProcTable[proc_slot].parent_location = -1;
+   ProcTable[proc_slot].next_proc_ptr = NULL;
+   ProcTable[proc_slot].child_proc_ptr = NULL;
+   ProcTable[proc_slot].next_sibling_ptr = NULL;
+   ProcTable[proc_slot].total_time = 0;
+   ProcTable[proc_slot].startTime = 0;
+   ProcTable[proc_slot].kid_num = 0;
+   ProcTable[proc_slot].quit_code = 0;
+   ProcTable[proc_slot].blocked_by = 0;
    num_procs++;
    /* Initialize context for this process, but use launch function pointer for
     * the initial value of the process's program counter (PC)
@@ -354,11 +362,6 @@ int join(int *code)
       console("Join() called in user mode. Halting...\n");
       halt(1);
    }
-   // if (Current->zapped == 1)
-   // {
-   //    *code = oldChild->quit_code;
-   //    return -1;
-   // }
    if (oldChild == NULL)
    {
       return -2;
@@ -424,7 +427,6 @@ int join(int *code)
    Returns - nothing
    Side Effects - changes the parent of pid child completion status list.
    ------------------------------------------------------------------------ */
-// need to remove from process_table
 void quit(int code)
 {
    if (!(kernel_or_user()))
