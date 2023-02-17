@@ -355,6 +355,11 @@ int join(int *code)
       console("Join() called in user mode. Halting...\n");
       halt(1);
    }
+   if (Current->zapped == 1)
+   {
+      *code = oldChild->quit_code;
+      return -1;
+   }
    if (oldChild == NULL)
    {
       return -2;
@@ -368,12 +373,24 @@ int join(int *code)
    }
    else
    {
+
       // current process is now going to be blocked by the join
       Blocked = Current;
       Blocked->status = JOIN_BLOCK;
       // add process into blocked_list
       add_next_process_blocked(Blocked);
       // until the child quits, continue running dispatcher until the child runs and quits
+
+      Blocked->blocked_by = oldChild->pid;
+      dispatcher();
+      if (Blocked->zapped == 1)
+      {
+         // if zapped during join, return -2
+         Current->child_proc_ptr = oldChild->next_sibling_ptr;
+         oldChild->next_sibling_ptr = NULL;
+         return -1;
+      }
+      /*
       while (oldChild->status != QUIT)
       {
          // let the blocked program know that it is being blocked by a child process, then dispatch
@@ -387,6 +404,7 @@ int join(int *code)
             return -1;
          }
       }
+      */
       Blocked->kids--;
       // remove the child from the list of children, make the sibling the new child
       Current->child_proc_ptr = oldChild->next_sibling_ptr;
@@ -667,12 +685,42 @@ int zap(int pid)
    proc_ptr zapped_proc = &ProcTable[i];
    blocked_ptr->blocked_by = zapped_proc->pid;
    zapped_proc->zapped = 1;
+
+   zapped_proc->zapped = 1;
+
+   /*
+   if (zapped_proc->status == QUIT)
+   {
+      // if the process quit before we zapped, no need to dispatch
+      //zapped_proc->zapped = 0;
+      remove_from_block_list_no_add(blocked_ptr);
+      return 0;
+   }
+   while (zapped_proc->status != QUIT)
+   {
+      blocked_ptr->status = ZAP_BLOCK;
+      if (blocked_ptr->zapped == 1)
+      {
+         zapped_proc->zapped = 0;
+         return -1;
+      }
+      else
+      {
+         dispatcher();
+      }
+   }
+   //zapped_proc->zapped = 0;
+   return 0;
+}
+*/
+
    if (zapped_proc->status == QUIT)
    {
       // if the process quit before we zapped, no need to dispatch
       remove_from_block_list_no_add(blocked_ptr);
       return 0;
    }
+   /*
    while (zapped_proc->status != QUIT)
    {
       blocked_ptr->status = ZAP_BLOCK;
@@ -686,6 +734,15 @@ int zap(int pid)
          dispatcher();
       }
    }
+   */
+
+   blocked_ptr->status = ZAP_BLOCK;
+   dispatcher();
+   if (blocked_ptr->zapped == 1)
+   {
+      return -1;
+   }
+
    return 0;
 }
 
@@ -702,7 +759,7 @@ int getpid(void)
 void dump_processes(void)
 {
    char *status;
-   printf("---------------\n");
+   //printf("---------------\n");
    printf("PID\tParent\tPriority\tStatus\tNum Kids\tTime Used\tName\n");
    for (int i = 0; i < 50; i++)
    {
